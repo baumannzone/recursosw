@@ -1,10 +1,6 @@
 <template>
   <v-app>
-    <v-navigation-drawer
-      v-model="drawer"
-      fixed
-      app
-    >
+    <v-navigation-drawer v-model="drawer" fixed app disable-resize-watcher>
       <v-list dense>
         <v-list-tile>
           <v-list-tile-action>
@@ -25,10 +21,9 @@
       </v-list>
     </v-navigation-drawer>
     <v-toolbar app temporary fixed>
-      <v-toolbar-side-icon @click.stop="drawer = !drawer" class="hidden-md-and-up" />
+      <v-toolbar-side-icon @click.stop="drawer = !drawer" class="hidden-md-and-up"/>
       <v-toolbar-title class="headline text-uppercase">
-        <span>Vuetify</span>
-        <span class="font-weight-light">MATERIAL DESIGN</span>
+        <span>Recurs<span class="font-weight-light">OSW</span></span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items class="hidden-sm-and-down">
@@ -46,13 +41,10 @@
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld'
 
 export default {
   name: 'App',
-  components: {
-    HelloWorld
-  },
+  components: {},
   data () {
     return {
       drawer: false
