@@ -35,6 +35,7 @@
         <v-btn flat>Link One</v-btn>
         <v-btn flat>Link Two</v-btn>
         <v-btn flat>Link Three</v-btn>
+        <span>{{$store.getters.isAuthenticated}}</span>
       </v-toolbar-items>
     </v-toolbar>
 

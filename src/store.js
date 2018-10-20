@@ -62,7 +62,6 @@ export default new Vuex.Store({
     },
     userSignInGoogle ({ commit }, payload) {
       commit('setLoading', true)
-      alert('{userSignInGoogle}')
       const provider = new firebase.auth.GoogleAuthProvider()
       firebase.auth().signInWithPopup(provider)
         .then(firebaseUser => {
@@ -95,6 +94,7 @@ export default new Vuex.Store({
   },
   getters: {
     isAuthenticated (state) {
+      console.log('{AUTH}', firebase.auth().currentUser)
       return state.user !== null && state.user !== undefined
     }
   }
