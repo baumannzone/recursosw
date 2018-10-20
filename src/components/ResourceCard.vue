@@ -1,28 +1,28 @@
 <template>
-  <v-card>
-    <v-layout row wrap>
-      <!--<v-flex xs12>-->
-        <!--<h2>{{ data.name }}</h2>-->
-      <!--</v-flex>-->
-      <!--<v-flex md3>-->
-        <!--<img :src="data.media.mainImg" height="150px"/>-->
-      <!--</v-flex>-->
-      <!--<v-flex md9>-->
-        <!--<div>-->
-          <!--<div class="headline"> {{ data.title }}</div>-->
-          <!--<div>{{ data.shortDesc }}</div>-->
-        <!--</div>-->
-      <!--</v-flex>-->
-      <div class="resource">
-        <div class="resource-img">
-          <img :src="data.media.mainImg" height="150px"/>
-        </div>
-        <div class="resource-content">
-          <div class="headline"> {{ data.title }}</div>
+  <v-card class="elevation-0">
+    <div class="resource pa-2 mb-2">
+      <div class="resource-img">
+        <img :src="data.media.mainImg" width="85px"/>
+      </div>
+      <div class="resource-content pl-3">
+        <div class="top">
+          <div class="title"> {{ data.name }}</div>
           <div>{{ data.shortDesc }}</div>
         </div>
+        <div class="bottom">
+          <div class="tags">
+            <v-chip
+              label
+              small
+              v-for="(tag, idx) in data.tags"
+              :key="idx"
+              text-color
+            >
+              {{ tag }}</v-chip>
+          </div>
+        </div>
       </div>
-    </v-layout>
+    </div>
   </v-card>
 </template>
 <script>
@@ -36,3 +36,15 @@ export default {
   }
 }
 </script>
+
+<style scoped lang="stylus">
+  .resource
+    display flex
+    position relative
+    .resource-img
+      display block
+    .resource-content
+      width 100%
+      display flex
+
+</style>
