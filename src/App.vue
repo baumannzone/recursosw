@@ -2,20 +2,12 @@
   <v-app>
     <v-navigation-drawer v-model="drawer" fixed app disable-resize-watcher>
       <v-list dense>
-        <v-list-tile>
+        <v-list-tile v-for="(item, idx) in menuItems" :key="idx" :to="item.path">
           <v-list-tile-action>
-            <v-icon>home</v-icon>
+            <v-icon>{{ item.icon }}</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
-            <v-list-tile-title>Home</v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
-        <v-list-tile>
-          <v-list-tile-action>
-            <v-icon>contact_mail</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <v-list-tile-title>Contact</v-list-tile-title>
+            <v-list-tile-title>{{ item.displayName }}</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
       </v-list>
@@ -27,9 +19,9 @@
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items class="hidden-sm-and-down">
-        <v-btn flat>Link One</v-btn>
-        <v-btn flat>Link Two</v-btn>
-        <v-btn flat>Link Three</v-btn>
+        <template v-for="(item, idx) in menuItems">
+          <v-btn flat :to="item.path" :key="idx">{{ item.displayName }}</v-btn>
+        </template>
         <span>{{$store.getters.isAuthenticated}}</span>
       </v-toolbar-items>
     </v-toolbar>
@@ -44,10 +36,13 @@
 
 export default {
   name: 'App',
-  components: {},
   data () {
     return {
-      drawer: false
+      drawer: false,
+      menuItems: [
+        { displayName: 'Home', icon: 'home', path: '/' },
+        { displayName: 'Login', icon: 'contact_mail', path: '/signin' }
+      ]
     }
   }
 }
