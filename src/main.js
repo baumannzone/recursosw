@@ -12,5 +12,8 @@ new Vue({
   router,
   store,
   i18n,
-  render: h => h(App)
+  render: h => h(App),
+  created () {
+    store.dispatch('autoSignIn')
+  }
 }).$mount('#app')
