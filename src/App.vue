@@ -12,7 +12,7 @@
         </v-list-tile>
       </v-list>
     </v-navigation-drawer>
-    <v-toolbar app temporary fixed>
+    <v-toolbar app temporary fixed class="elevation-0">
       <v-toolbar-side-icon @click.stop="drawer = !drawer" class="hidden-md-and-up"/>
       <v-toolbar-title class="headline text-uppercase">
         <span>Recurs<span class="font-weight-light">OSW</span></span>
