@@ -10,6 +10,16 @@
             <v-list-tile-title>Home</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
+
+        <v-list-tile to="/robinchon">
+          <v-list-tile-action>
+            <v-icon>person</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>Robinchon</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+
         <v-list-tile>
           <v-list-tile-action>
             <v-icon>contact_mail</v-icon>
