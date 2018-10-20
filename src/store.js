@@ -17,7 +17,10 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     appTitle: 'My Awesome App',
+    userData: null,
     user: null,
+    likes: {},
+    favs: {},
     error: null,
     loading: false
   },
@@ -30,6 +33,15 @@ export default new Vuex.Store({
     },
     setLoading (state, payload) {
       state.loading = payload
+    },
+    setUserData (state, payload) {
+      state.userData = payload
+    },
+    likes (state, payload) {
+      state.likes = payload
+    },
+    favs (state, payload) {
+      state.favs = payload
     }
   },
   actions: {
@@ -65,7 +77,6 @@ export default new Vuex.Store({
       const provider = new firebase.auth.GoogleAuthProvider()
       firebase.auth().signInWithPopup(provider)
         .then(firebaseUser => {
-          console.log({ firebaseUser })
           if (firebaseUser.user) {
             commit('setUser', {
               name: firebaseUser.user.displayName,
@@ -90,12 +101,36 @@ export default new Vuex.Store({
       firebase.auth().signOut()
       commit('setUser', null)
       router.push('/')
+    },
+    getUserData ({ commit, state }, user) {
+      if (user && user.uid) {
+        firebase.firestore().doc('users/' + user.uid).get()
+          .then(snapshot => {
+            const data = { id: snapshot.id, ...snapshot.data() }
+            data.likes = data.likes || {}
+            data.favs = data.favs || {}
+            if (data.likes) commit('likes', data.likes)
+            if (data.favs) commit('favs', data.favs)
+            console.log({ userData: data })
+            return data
+          })
+          .then(data => commit('setUserData', data))
+          .catch(() => commit('setUserData', null))
+      }
+    },
+    updateUserData ({ commit, state }, payload) {
+      console.log('commit likes -->', payload.likes)
+      if (payload.likes) commit('likes', payload.likes)
+      if (payload.favs) commit('favs', payload.favs)
+      firebase.firestore().doc('users/' + state.userData.id).update(payload)
     }
   },
   getters: {
     isAuthenticated (state) {
-      console.log('{AUTH}', firebase.auth().currentUser)
       return state.user !== null && state.user !== undefined
-    }
+    },
+    getUserData: (state) => (state.userData),
+    likes: (state) => (state.likes),
+    favs: (state) => (state.favs)
   }
 })
