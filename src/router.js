@@ -6,8 +6,8 @@ const routerOptions = [
   // { path: '/', name: 'Home',component: 'Home', meta: { requiresAuth: true } },
   { path: '/', name: 'Home', component: 'Home' },
   { path: '/signin', name: 'Signin', component: 'Signin' },
-  { path: '/about', name: 'About', component: 'About' }
-  // { path: '*', name: 'NotFound', component: 'NotFound' }
+  { path: '/about', name: 'About', component: 'About' },
+  { path: '/robinchon', name: 'Robinchon', component: 'Robinchon' }
 ]
 
 const routes = routerOptions.map(route => {
@@ -28,7 +28,6 @@ router.beforeEach((to, from, next) => {
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
   const isAuthenticated = store.getters.isAuthenticated
   if (requiresAuth && !isAuthenticated) {
-    // this.$store.dispatch('aut')
     next('/signin')
   } else {
     next()
