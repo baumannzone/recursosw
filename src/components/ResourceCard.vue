@@ -18,7 +18,22 @@
               :key="idx"
               text-color
             >
-              {{ tag }}</v-chip>
+              {{ tag }}
+            </v-chip>
+          </div>
+          <div class="actions">
+            <v-chip outline small class="mr-1">
+              <v-icon>
+                keyboard_arrow_up
+              </v-icon>
+              {{ data.likesCount }}
+            </v-chip>
+            <v-chip outline small>
+              <v-icon>
+                star_border
+              </v-icon>
+              <!--{{ data.favsCount }}-->
+            </v-chip>
           </div>
         </div>
       </div>
@@ -46,5 +61,11 @@ export default {
     .resource-content
       width 100%
       display flex
+      flex-direction column
+      justify-content space-between
+      .bottom
+        display flex
+        flex-direction row
+        justify-content space-between
 
 </style>
