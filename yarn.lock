@@ -1370,6 +1370,10 @@
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/@nodelib/fs.stat/-/fs.stat-1.1.2.tgz#54c5a964462be3d4d78af631363c18d6fa91ac26"
 
+"@posva/vuefire-core@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@posva/vuefire-core/-/vuefire-core-1.0.2.tgz#a9b0bdc755a5365da5d401e4493759a442eb43f2"
+
 "@samverschueren/stream-to-observable@^0.3.0":
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/@samverschueren/stream-to-observable/-/stream-to-observable-0.3.0.tgz#ecdf48d532c58ea477acfcab80348424f8d0662f"
@@ -9446,6 +9450,12 @@ vue-template-es2015-compiler@^1.6.0:
 vue@^2.5.16, vue@^2.5.17:
   version "2.5.17"
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.5.17.tgz#0f8789ad718be68ca1872629832ed533589c6ada"
+
+vuefire@^2.0.0-alpha.15:
+  version "2.0.0-alpha.15"
+  resolved "https://registry.yarnpkg.com/vuefire/-/vuefire-2.0.0-alpha.15.tgz#fd45d1311a2f56bea0003f384302847ea807b6ff"
+  dependencies:
+    "@posva/vuefire-core" "^1.0.2"
 
 vuetify-loader@^1.0.5:
   version "1.0.5"

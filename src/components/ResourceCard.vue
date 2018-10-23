@@ -1,5 +1,5 @@
 <template>
-  <v-card class="elevation-0">
+  <v-card flat>
     <div class="resource pa-2 mb-2">
       <div class="resource-img">
         <img :src="data.media.mainImg" width="85px"/>

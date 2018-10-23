@@ -5,6 +5,7 @@ import store from './store'
 const routerOptions = [
   // { path: '/', name: 'Home',component: 'Home', meta: { requiresAuth: true } },
   { path: '/', name: 'Home', component: 'Home' },
+  { path: '/create', name: 'Create', component: 'Create' },
   { path: '/signin', name: 'Signin', component: 'Signin' },
   { path: '/about', name: 'About', component: 'About' },
   { path: '/robinchon', name: 'Robinchon', component: 'Robinchon' }
