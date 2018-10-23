@@ -1,28 +1,20 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import firebase from 'firebase'
 import router from '@/router'
 
-firebase.initializeApp({
-  apiKey: 'AIzaSyAx_xg8vnGH5cLeudjy-PkcX3oiLnKHT2I',
-  authDomain: 'recursosw-cbe9e.firebaseapp.com',
-  databaseURL: 'https://recursosw-cbe9e.firebaseio.com',
-  projectId: 'recursosw-cbe9e',
-  storageBucket: 'recursosw-cbe9e.appspot.com',
-  messagingSenderId: '766701676434'
-})
+import { db, auth, googleProvider } from './config'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    appTitle: 'My Awesome App',
     userData: null,
     user: null,
     likes: {},
     favs: {},
     error: null,
-    loading: false
+    loading: false,
+    resources: []
   },
   mutations: {
     setUser (state, payload) {
@@ -42,12 +34,15 @@ export default new Vuex.Store({
     },
     favs (state, payload) {
       state.favs = payload
+    },
+    setResources (state, payload) {
+      state.resources = payload
     }
   },
   actions: {
     userSignUp ({ commit }, payload) {
       commit('setLoading', true)
-      firebase.auth().createUserWithEmailAndPassword(payload.email, payload.password)
+      auth.createUserWithEmailAndPassword(payload.email, payload.password)
         .then(firebaseUser => {
           commit('setUser', { email: firebaseUser.user.email })
           commit('setLoading', false)
@@ -60,7 +55,7 @@ export default new Vuex.Store({
     },
     userSignIn ({ commit }, payload) {
       commit('setLoading', true)
-      firebase.auth().signInWithEmailAndPassword(payload.email, payload.password)
+      auth.signInWithEmailAndPassword(payload.email, payload.password)
         .then(firebaseUser => {
           commit('setUser', { email: firebaseUser.email })
           commit('setLoading', false)
@@ -74,8 +69,7 @@ export default new Vuex.Store({
     },
     userSignInGoogle ({ commit }, payload) {
       commit('setLoading', true)
-      const provider = new firebase.auth.GoogleAuthProvider()
-      firebase.auth().signInWithPopup(provider)
+      auth.signInWithPopup(googleProvider)
         .then(firebaseUser => {
           if (firebaseUser.user) {
             commit('setUser', {
@@ -95,23 +89,25 @@ export default new Vuex.Store({
         })
     },
     autoSignIn ({ commit }, payload) {
-      if (payload && payload.email) { commit('setUser', { email: payload.email }) }
+      if (payload && payload.email) {
+        commit('setUser', { email: payload.email })
+      }
     },
     userSignOut ({ commit }) {
-      firebase.auth().signOut()
+      auth.signOut()
       commit('setUser', null)
       router.push('/')
     },
     getUserData ({ commit, state }, user) {
       if (user && user.uid) {
-        firebase.firestore().doc('users/' + user.uid).get()
+        db.doc('users/' + user.uid).get()
           .then(snapshot => {
             const data = { id: snapshot.id, ...snapshot.data() }
             data.likes = data.likes || {}
             data.favs = data.favs || {}
             if (data.likes) commit('likes', data.likes)
             if (data.favs) commit('favs', data.favs)
-            console.log({ userData: data })
+            // console.log({ userData: data })
             return data
           })
           .then(data => commit('setUserData', data))
@@ -122,7 +118,20 @@ export default new Vuex.Store({
       console.log('commit likes -->', payload.likes)
       if (payload.likes) commit('likes', payload.likes)
       if (payload.favs) commit('favs', payload.favs)
-      firebase.firestore().doc('users/' + state.userData.id).update(payload)
+      db.doc('users/' + state.userData.id).update(payload)
+    },
+    getResources ({ commit }) {
+      const resources = []
+      db.collection('resources')
+        .onSnapshot((doc) => {
+          doc.forEach((doc) => {
+            resources.push({
+              id: doc.id,
+              ...doc.data()
+            })
+          })
+          commit('setResources', resources)
+        })
     }
   },
   getters: {
@@ -131,6 +140,7 @@ export default new Vuex.Store({
     },
     getUserData: (state) => (state.userData),
     likes: (state) => (state.likes),
-    favs: (state) => (state.favs)
+    favs: (state) => (state.favs),
+    resources: (state) => (state.resources)
   }
 })

@@ -2,21 +2,23 @@
   <v-container>
     <v-layout row wrap>
       <v-flex xs12>
-        <template v-for="resource in resources">
+        <template v-for="resource in resourcesList">
           <ResourceCard :data="resource" :key="resource.id"/>
         </template>
+        <pre>{{ resources }}</pre>
       </v-flex>
     </v-layout>
   </v-container>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import ResourceCard from './ResourceCard'
 
 export default {
   components: { ResourceCard },
   data: () => ({
-    resources: [
+    resourcesList: [
       {
         id: '1234567',
         name: 'Recurso 1',
@@ -58,6 +60,12 @@ export default {
         }
       }
     ]
-  })
+  }),
+  computed: {
+    ...mapGetters([ 'resources' ])
+  },
+  created () {
+    this.$store.dispatch('getResources')
+  }
 }
 </script>
