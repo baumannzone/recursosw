@@ -131,6 +131,9 @@ export default new Vuex.Store({
         .update({
           'media.mainImg': img
         })
+    },
+    deleteResource ({ commit }, id) {
+      return db.collection(resources).doc(id).delete()
     }
   },
   getters: {

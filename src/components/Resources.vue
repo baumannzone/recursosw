@@ -5,7 +5,6 @@
         <template v-for="resource in resources">
           <ResourceCard :data="resource" :key="resource.id"/>
         </template>
-        <!--<pre>{{ resources }}</pre>-->
       </v-flex>
     </v-layout>
   </v-container>
@@ -30,7 +29,7 @@ export default {
       services.getResources()
         .onSnapshot((snapshot) => {
           this.resourceList = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
-          console.log('RESOURCES: ')
+          console.log('RESOURCE List: ')
           console.log(this.resourceList)
         }, (error) => {
           console.log('[getResources]: ', error.toString())

@@ -8,6 +8,7 @@
         <div class="top">
           <div class="title"> {{ data.name }}</div>
           <div>{{ data.shortDesc }}</div>
+          <button class="red--text" @click="deleteResource">Delete <small>[{{ data.id }}]</small></button>
         </div>
         <div class="bottom">
           <div class="tags">
@@ -47,6 +48,17 @@ export default {
     data: {
       type: Object,
       required: true
+    }
+  },
+  methods: {
+    deleteResource () {
+      this.$store.dispatch('deleteResource', this.data.id)
+        .then(() => {
+          console.log('Document successfully deleted!')
+        })
+        .catch((error) => {
+          console.error('Error removing document: ', error)
+        })
     }
   }
 }

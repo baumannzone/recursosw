@@ -98,7 +98,7 @@
             </v-flex>
 
             <div class="form-buttons">
-              <v-btn color="primary" @click="submitForm('form')">Submit</v-btn>
+              <v-btn color="primary" @click="submitForm('form')" :disabled="isLoading" :loading="isLoading">Submit</v-btn>
             </div>
           </v-layout>
         </v-card-text>
@@ -116,6 +116,7 @@ export default {
   },
   data: () => {
     return {
+      isLoading: false,
       form: {
         name: 'demo',
         shortDesc: 'asdasdasd as d asd as da sd',
@@ -178,6 +179,7 @@ export default {
         favsCount: 0,
         likesCount: 0
       }
+      this.isLoading = true
       this.$store.dispatch('createResource', data)
         .then((docRef) => {
           const data = {
@@ -186,18 +188,22 @@ export default {
           }
           this.$store.dispatch('uploadResourceImg', data)
             .then((snapshot) => {
-              snapshot.ref.getDownloadURL().then((downloadURL) => {
-                console.log('File available at', downloadURL)
-                this.$store.dispatch('updateResourceImg', { id: docRef.id, img: downloadURL })
-                  .then(function () {
-                    console.log('Document successfully updated!')
-                  })
-              })
+              snapshot.ref.getDownloadURL()
+                .then((downloadURL) => {
+                  console.log('File available at', downloadURL)
+                  this.$store.dispatch('updateResourceImg', { id: docRef.id, img: downloadURL })
+                    .then(() => {
+                      console.log('Document successfully updated!')
+                      this.isLoading = false
+                      this.$router.push('/')
+                    })
+                })
             })
         })
         .catch((err) => {
           console.log('err: ')
           console.log(err)
+          this.isLoading = false
         })
     }
   }

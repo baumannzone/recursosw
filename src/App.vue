@@ -14,17 +14,17 @@
     </v-navigation-drawer>
     <v-toolbar app temporary fixed class="elevation-0">
       <v-toolbar-side-icon @click.stop="drawer = !drawer" class="hidden-md-and-up"/>
-      <v-toolbar-title class="headline text-uppercase">
+      <v-toolbar-title class="headline text-uppercase cursor" @click="goHome">
         <span>Recurs<span class="font-weight-light">OSW</span></span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items class="hidden-sm-and-down">
-
         <template v-for="(item, idx) in menuItems">
           <v-btn flat :to="item.path" :key="idx">{{ item.displayName }}</v-btn>
         </template>
-
-        <span>{{$store.getters.isAuthenticated}}</span>
+        <template v-if="$route.path === '/robinchon'">
+          <span>{{$store.getters.isAuthenticated}}</span>
+        </template>
       </v-toolbar-items>
     </v-toolbar>
 
@@ -42,11 +42,20 @@ export default {
     return {
       drawer: false,
       menuItems: [
-        { displayName: 'Home', icon: 'home', path: '/' },
-        { displayName: 'Login', icon: 'contact_mail', path: '/signin' },
-        { displayName: 'Robinchon', icon: 'person', path: '/robinchon' }
+        { displayName: 'Crear', icon: 'add', path: '/create' },
+        { displayName: 'Login', icon: 'contact_mail', path: '/signin' }
       ]
+    }
+  },
+  methods: {
+    goHome () {
+      this.$router.push('/')
     }
   }
 }
 </script>
+
+<style lang="stylus">
+  .cursor:hover
+    cursor pointer
+</style>
