@@ -116,7 +116,13 @@ export default {
   },
   data: () => {
     return {
-      form: {},
+      form: {
+        name: 'demo',
+        shortDesc: 'asdasdasd as d asd as da sd',
+        fullDesc: 'ASD ASD ASD ASD LOL',
+        link: 'baumannzone.com',
+        tags: [ 'Hacking', 'IoT' ]
+      },
       valid: true,
       mainImg: {
         size: 0,
@@ -162,9 +168,37 @@ export default {
       this.mainImg.base64 = ''
     },
     submitForm (form) {
-      const data = { formData: this.form, imgData: this.mainImg }
-      console.log(data)
-      // console.log(this.$refs.form.validate())
+      // const data = { formData: this.form, imgData: this.mainImg }
+      const data = {
+        ...this.form,
+        createdAt: new Date(),
+        media: {
+          mainImg: ''
+        },
+        favsCount: 0,
+        likesCount: 0
+      }
+      this.$store.dispatch('createResource', data)
+        .then((docRef) => {
+          const data = {
+            id: docRef.id,
+            img: this.mainImg.base64
+          }
+          this.$store.dispatch('uploadResourceImg', data)
+            .then((snapshot) => {
+              snapshot.ref.getDownloadURL().then((downloadURL) => {
+                console.log('File available at', downloadURL)
+                this.$store.dispatch('updateResourceImg', { id: docRef.id, img: downloadURL })
+                  .then(function () {
+                    console.log('Document successfully updated!')
+                  })
+              })
+            })
+        })
+        .catch((err) => {
+          console.log('err: ')
+          console.log(err)
+        })
     }
   }
 }

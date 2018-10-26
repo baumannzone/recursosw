@@ -2,9 +2,11 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import router from '@/router'
 
-import { db, auth, googleProvider } from './config'
+import { db, auth, googleProvider, storage } from './config'
 
 Vue.use(Vuex)
+
+const [ resources, users ] = [ 'resources', 'users' ]
 
 export default new Vuex.Store({
   state: {
@@ -13,8 +15,7 @@ export default new Vuex.Store({
     likes: {},
     favs: {},
     error: null,
-    loading: false,
-    resources: []
+    loading: false
   },
   mutations: {
     setUser (state, payload) {
@@ -34,9 +35,6 @@ export default new Vuex.Store({
     },
     favs (state, payload) {
       state.favs = payload
-    },
-    setResources (state, payload) {
-      state.resources = payload
     }
   },
   actions: {
@@ -115,22 +113,23 @@ export default new Vuex.Store({
       }
     },
     updateUserData ({ commit, state }, payload) {
-      console.log('commit likes -->', payload.likes)
       if (payload.likes) commit('likes', payload.likes)
       if (payload.favs) commit('favs', payload.favs)
-      db.doc('users/' + state.userData.id).update(payload)
+      db.doc(`${users}/${state.userData.id}`).update(payload)
     },
-    getResources ({ commit }) {
-      const resources = []
-      db.collection('resources')
-        .onSnapshot((doc) => {
-          doc.forEach((doc) => {
-            resources.push({
-              id: doc.id,
-              ...doc.data()
-            })
-          })
-          commit('setResources', resources)
+    createResource ({ commit }, payload) {
+      return db.collection(resources).add(payload)
+    },
+    uploadResourceImg ({ commit }, { id, img }) {
+      return storage
+        .ref(`${id}/`)
+        .child('mainImg')
+        .putString(img, 'data_url', { contentType: 'image/png' })
+    },
+    updateResourceImg ({ commit }, { id, img }) {
+      return db.collection(resources).doc(id)
+        .update({
+          'media.mainImg': img
         })
     }
   },
@@ -140,7 +139,6 @@ export default new Vuex.Store({
     },
     getUserData: (state) => (state.userData),
     likes: (state) => (state.likes),
-    favs: (state) => (state.favs),
-    resources: (state) => (state.resources)
+    favs: (state) => (state.favs)
   }
 })
