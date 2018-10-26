@@ -29,7 +29,7 @@
             <v-flex sm6 xs12>
               <v-text-field
                 v-model="form.shortDesc"
-                :rules="[rules.required, rules.less60]"
+                :rules="[rules.required]"
                 label="Short description"
                 counter="60"
                 placeholder="Description"
@@ -118,11 +118,11 @@ export default {
     return {
       isLoading: false,
       form: {
-        name: 'demo',
-        shortDesc: 'asdasdasd as d asd as da sd',
-        fullDesc: 'ASD ASD ASD ASD LOL',
-        link: 'baumannzone.com',
-        tags: [ 'Hacking', 'IoT' ]
+        name: '',
+        shortDesc: '',
+        fullDesc: '',
+        link: '',
+        tags: []
       },
       valid: true,
       mainImg: {
