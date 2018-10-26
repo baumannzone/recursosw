@@ -32,8 +32,8 @@
               {{ data.likesCount }}
             </v-chip>
             <v-chip outline small>
-              <v-icon>
-                star_border
+              <v-icon :color="likeColor[data.liked]">
+                {{ likeIcon[data.liked] }}
               </v-icon>
               <!--{{ data.favsCount }}-->
             </v-chip>
@@ -52,6 +52,16 @@ export default {
       required: true
     }
   },
+  data: () => ({
+    likeIcon: {
+      true: 'star',
+      false: 'star_border'
+    },
+    likeColor: {
+      true: 'yellow accent-4',
+      false: 'gray'
+    }
+  }),
   methods: {
     deleteResource () {
       this.$store.dispatch('deleteResource', this.data.id)

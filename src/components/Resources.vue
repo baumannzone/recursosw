@@ -13,6 +13,7 @@
 <script>
 import ResourceCard from './ResourceCard'
 import services from '@/services'
+import { mapGetters } from 'vuex'
 
 export default {
   components: { ResourceCard },
@@ -20,6 +21,7 @@ export default {
     resourceList: []
   }),
   computed: {
+    ...mapGetters(['getUserData']),
     resources () {
       return this.resourceList
     }
@@ -28,7 +30,15 @@ export default {
     getResources () {
       services.getResources()
         .onSnapshot((snapshot) => {
-          this.resourceList = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
+          this.resourceList = snapshot.docs
+            .map(doc => {
+              return {
+                id: doc.id,
+                ...doc.data(),
+                liked: true,
+                favourited: true
+              }
+            })
           console.log('RESOURCE List: ')
           console.log(this.resourceList)
         }, (error) => {

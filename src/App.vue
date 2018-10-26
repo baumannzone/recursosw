@@ -20,7 +20,10 @@
       <v-spacer></v-spacer>
       <v-toolbar-items class="hidden-sm-and-down">
         <template v-for="(item, idx) in menuItems">
-          <v-btn flat :to="item.path" :key="idx">{{ item.displayName }}</v-btn>
+          <v-btn flat
+            v-if="show(item)"
+            :to="item.path"
+            :key="idx">{{ item.displayName }}</v-btn>
         </template>
         <template v-if="$route.path === '/robinchon'">
           <span>{{$store.getters.isAuthenticated}}</span>
@@ -42,14 +45,23 @@ export default {
     return {
       drawer: false,
       menuItems: [
-        { displayName: 'Crear', icon: 'add', path: '/create' },
-        { displayName: 'Login', icon: 'contact_mail', path: '/signin' }
+        { displayName: 'Crear', icon: 'add', path: '/create', requireAuth: true },
+        { displayName: 'Login', icon: 'contact_mail', path: '/signin', offAuthenticated: true },
+        { displayName: 'Logout', icon: 'contact_mail', path: '/signout', requireAuth: true }
       ]
     }
   },
   methods: {
     goHome () {
       this.$router.push('/')
+    },
+    show (item) {
+      if (item.offAuthenticated) {
+        return !this.$store.getters.isAuthenticated
+      } else if (item.requireAuth) {
+        return this.$store.getters.isAuthenticated
+      }
+      return true
     }
   }
 }

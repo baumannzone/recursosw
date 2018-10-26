@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import router from '@/router'
 
-import { db, auth, googleProvider, storage } from './config'
+import { db, auth, googleProvider, ghProvider, storage } from './config'
 
 Vue.use(Vuex)
 
@@ -86,14 +86,38 @@ export default new Vuex.Store({
           commit('setLoading', false)
         })
     },
+    userSignInGithub ({ commit }, payload) {
+      commit('setLoading', true)
+      auth.signInWithPopup(ghProvider)
+        .then(firebaseUser => {
+          if (firebaseUser.user) {
+            commit('setUser', {
+              name: firebaseUser.user.displayName,
+              email: firebaseUser.user.email
+            })
+            commit('setLoading', false)
+            commit('setError', null)
+            router.push({ name: 'Home' })
+          } else {
+            throw new Error('Error credentials')
+          }
+        })
+        .catch(error => {
+          commit('setError', error.message)
+          commit('setLoading', false)
+        })
+    },
     autoSignIn ({ commit }, payload) {
+      console.log({ payload })
       if (payload && payload.email) {
         commit('setUser', { email: payload.email })
       }
     },
     userSignOut ({ commit }) {
+      console.log('[routerPush]')
       auth.signOut()
       commit('setUser', null)
+      commit('setUserData', null)
       router.push('/')
     },
     getUserData ({ commit, state }, user) {
