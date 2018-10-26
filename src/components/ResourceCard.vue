@@ -8,7 +8,9 @@
         <div class="top">
           <div class="title"> {{ data.name }}</div>
           <div>{{ data.shortDesc }}</div>
-          <button class="red--text" @click="deleteResource">Delete <small>[{{ data.id }}]</small></button>
+          <template v-if="$store.getters.isAuthenticated">
+            <button class="red--text" @click="deleteResource">Delete <small>[{{ data.id }}]</small></button>
+          </template>
         </div>
         <div class="bottom">
           <div class="tags">
