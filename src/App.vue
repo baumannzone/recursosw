@@ -19,6 +19,11 @@
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items class="hidden-sm-and-down">
+       <!--  <v-text-field
+          @change="onSearch()"
+          clearable
+          append-icon="search"
+          v-model="search"></v-text-field> -->
         <template v-for="(item, idx) in menuItems">
           <v-btn flat
             v-if="show(item)"
@@ -38,11 +43,12 @@
 </template>
 
 <script>
-
+// import { debounce } from './utils/debounce'
 export default {
   name: 'App',
   data () {
     return {
+      search: '',
       drawer: false,
       menuItems: [
         { displayName: 'Crear', icon: 'add', path: '/create', requireAuth: true },
@@ -62,8 +68,16 @@ export default {
         return this.$store.getters.isAuthenticated
       }
       return true
+    },
+    onSearch () {
+      this.$store.dispatch('search', this.search)
     }
   }
+  // watch: {
+  //   search: debounce(() => {
+  //     this.$store.dispatch('search', this.search)
+  //   })
+  // }
 }
 </script>
 

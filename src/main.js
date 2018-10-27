@@ -26,7 +26,16 @@ firebase.auth().onAuthStateChanged(user => {
       }
     }).$mount('#app')
   }
-  if (user) store.dispatch('getUserData', user)
+  if (user) {
+    store.dispatch('getUserData', user)
+      .then(res => {
+        const dataUser = { displayName: user.displayName, likes: {}, favs: {} }
+        if (res && res.error) {
+          store.dispatch('updateUserData', dataUser)
+          store.dispatch('setUserData', dataUser)
+        }
+      })
+  }
 })
 
 export const db = firebase.firestore()

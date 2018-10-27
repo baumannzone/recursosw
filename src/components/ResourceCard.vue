@@ -25,17 +25,16 @@
             </v-chip>
           </div>
           <div class="actions">
-            <v-chip outline small class="mr-1">
-              <v-icon>
-                keyboard_arrow_up
+            <v-chip outline small class="mr-1" @click="likeResource()">
+              <v-icon :color="likeColor[!!data.liked]">
+                thumb_up
               </v-icon>
-              {{ data.likesCount }}
+              <span style="padding-left:5px">{{ data.likesCount }}</span>
             </v-chip>
-            <v-chip outline small>
-              <v-icon :color="likeColor[data.liked]">
-                {{ likeIcon[data.liked] }}
+            <v-chip outline small @click="favResource()">
+              <v-icon :color="favColor[!!data.favourited]">
+                {{ favIcon[data.favourited] }}
               </v-icon>
-              <!--{{ data.favsCount }}-->
             </v-chip>
           </div>
         </div>
@@ -44,6 +43,7 @@
   </v-card>
 </template>
 <script>
+import { mapGetters } from 'vuex'
 export default {
   name: 'ResourceCard',
   props: {
@@ -53,15 +53,24 @@ export default {
     }
   },
   data: () => ({
-    likeIcon: {
+    unlocked: true,
+    favIcon: {
       true: 'star',
       false: 'star_border'
     },
-    likeColor: {
+    favColor: {
       true: 'yellow accent-4',
       false: 'gray'
+    },
+    likeColor: {
+      true: 'blue darken-2',
+      false: 'gray'
     }
+    // blue darken-2
   }),
+  computed: {
+    ...mapGetters(['isAuthenticated'])
+  },
   methods: {
     deleteResource () {
       this.$store.dispatch('deleteResource', this.data.id)
@@ -71,6 +80,36 @@ export default {
         .catch((error) => {
           console.error('Error removing document: ', error)
         })
+    },
+    favResource () {
+      if (!this.data.favourited && this.unlocked && this.isAuthenticated) {
+        this.unlocked = false
+        this.$store.dispatch('favResource', this.data.id)
+          .then(() => {
+            this.unlocked = true
+          })
+          .catch(error => {
+            this.unlocked = true
+            console.error({ error })
+          })
+      } else {
+        this.$store.dispatch('removeFav', this.data.id)
+      }
+    },
+    likeResource () {
+      if (!this.data.liked && this.unlocked && this.isAuthenticated) {
+        this.unlocked = false
+        this.$store.dispatch('likeResource', this.data.id)
+          .then(() => {
+            this.unlocked = true
+          })
+          .catch(error => {
+            this.unlocked = true
+            console.error({ error })
+          })
+      } else {
+        this.$store.dispatch('removeLike', this.data.id)
+      }
     }
   }
 }

@@ -12,27 +12,6 @@
                 {{ error }}
               </v-alert>
             </v-flex>
-<!--             <v-flex>
-              <v-text-field
-                name="email"
-                label="Email"
-                id="email"
-                type="email"
-                v-model="email"
-                required></v-text-field>
-            </v-flex>
-            <v-flex>
-              <v-text-field
-                name="password"
-                label="Password"
-                id="password"
-                type="password"
-                v-model="password"
-                required></v-text-field>
-            </v-flex> -->
-<!--             <v-flex class="text-xs-center" mt-5>
-              <v-btn color="primary" type="submit">Sign In</v-btn>
-            </v-flex> -->
             <v-flex class="text-xs-center" mt-5>
               <v-btn p-2 color="error" @click="googleSignIn">Google+</v-btn>
               <v-btn p-2 color="" @click="ghSignIn">

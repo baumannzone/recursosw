@@ -5,8 +5,10 @@ const services = {
    * Return resources
    * @returns {firebase.firestore.CollectionReference}
    */
-  getResources () {
-    return db.collection('resources').orderBy('createdAt', 'desc')
+  getResources (limit, search) {
+    const ref = db.collection('resources').orderBy('createdAt', 'desc').limit(limit)
+    if (search) ref.where('name', search)
+    return ref
   }
 }
 

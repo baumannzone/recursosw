@@ -3,7 +3,6 @@ import Router from 'vue-router'
 import store from './store'
 
 const routerOptions = [
-  // { path: '/', name: 'Home',component: 'Home', meta: { requiresAuth: true } },
   { path: '/', name: 'Home', component: 'Home' },
   { path: '/create', name: 'Create', component: 'Create' },
   { path: '/signin', name: 'Signin', component: 'Signin' },

@@ -6,7 +6,7 @@ import { db, auth, googleProvider, ghProvider, storage } from './config'
 
 Vue.use(Vuex)
 
-const [ resources, users ] = [ 'resources', 'users' ]
+const [ resources ] = [ 'resources' ]
 
 export default new Vuex.Store({
   state: {
@@ -14,6 +14,7 @@ export default new Vuex.Store({
     user: null,
     likes: {},
     favs: {},
+    search: '',
     error: null,
     loading: false
   },
@@ -35,6 +36,9 @@ export default new Vuex.Store({
     },
     favs (state, payload) {
       state.favs = payload
+    },
+    search (state, payload) {
+      state.search = payload
     }
   },
   actions: {
@@ -108,9 +112,12 @@ export default new Vuex.Store({
         })
     },
     autoSignIn ({ commit }, payload) {
-      console.log({ payload })
       if (payload && payload.email) {
-        commit('setUser', { email: payload.email })
+        commit('setUser', {
+          id: payload.uid,
+          uid: payload.uid,
+          email: payload.email
+        })
       }
     },
     userSignOut ({ commit }) {
@@ -122,24 +129,37 @@ export default new Vuex.Store({
     },
     getUserData ({ commit, state }, user) {
       if (user && user.uid) {
-        db.doc('users/' + user.uid).get()
-          .then(snapshot => {
-            const data = { id: snapshot.id, ...snapshot.data() }
+        return db.doc('users/' + user.uid).onSnapshot(
+          (snapshot) => {
+            if (!snapshot.exists) return { error: true }
+            const data = { id: user.uid, ...snapshot.data() }
             data.likes = data.likes || {}
             data.favs = data.favs || {}
             if (data.likes) commit('likes', data.likes)
             if (data.favs) commit('favs', data.favs)
-            // console.log({ userData: data })
+            commit('setUserData', data)
             return data
-          })
-          .then(data => commit('setUserData', data))
-          .catch(() => commit('setUserData', null))
+          },
+          () => {
+            commit('setUserData', null)
+            return { error: true }
+          }
+        )
       }
     },
     updateUserData ({ commit, state }, payload) {
       if (payload.likes) commit('likes', payload.likes)
       if (payload.favs) commit('favs', payload.favs)
-      db.doc(`${users}/${state.userData.id}`).update(payload)
+      db.doc(`users/${state.user.uid}`).set(payload, { merge: true })
+    },
+    setUserData ({ commit, state }, payload) {
+      commit('setUserData', payload)
+    },
+    removeFav ({ commit, state }, id) {
+      db.doc(`resources/${id}/favs/${state.user.uid}`).delete()
+    },
+    removeLike ({ commit, state }, id) {
+      db.doc(`resources/${id}/likes/${state.user.uid}`).delete()
     },
     createResource ({ commit }, payload) {
       return db.collection(resources).add(payload)
@@ -158,6 +178,19 @@ export default new Vuex.Store({
     },
     deleteResource ({ commit }, id) {
       return db.collection(resources).doc(id).delete()
+    },
+    favResource ({ commit, state }, id) {
+      const userId = state.userData.id
+      const data = { [userId]: true }
+      return db.doc(`resources/${id}/favs/${userId}`).set(data)
+    },
+    likeResource ({ commit, state }, id) {
+      const userId = state.userData.id
+      const data = { [userId]: true }
+      return db.doc(`resources/${id}/likes/${userId}`).set(data)
+    },
+    search ({ commit }, payload) {
+      commit('search', payload)
     }
   },
   getters: {
@@ -166,6 +199,7 @@ export default new Vuex.Store({
     },
     getUserData: (state) => (state.userData),
     likes: (state) => (state.likes),
-    favs: (state) => (state.favs)
+    favs: (state) => (state.favs),
+    search: (state) => (state.search)
   }
 })
