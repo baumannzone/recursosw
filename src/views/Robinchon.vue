@@ -1,6 +1,5 @@
 <template>
   <div class="about">
-    <h1>This is an robinchon page</h1>
     <Users></Users>
     <ResourcesRobinchon></ResourcesRobinchon>
   </div>
