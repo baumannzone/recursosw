@@ -24,7 +24,7 @@
               {{ tag }}
             </v-chip>
           </div>
-          <div class="actions">
+          <div class="actions" v-if="isAuthenticated">
             <v-chip outline small class="mr-1" @click="likeResource()">
               <v-icon :color="likeColor[!!data.liked]">
                 thumb_up
@@ -35,6 +35,12 @@
               <v-icon :color="favColor[!!data.favourited]">
                 {{ favIcon[data.favourited] }}
               </v-icon>
+            </v-chip>
+          </div>
+          <div v-else>
+            <v-chip outline small disabled>
+              <v-icon>thumb_up</v-icon>
+              <span class="pl-1">{{ data.likesCount }}</span>
             </v-chip>
           </div>
         </div>

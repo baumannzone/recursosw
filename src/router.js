@@ -4,11 +4,12 @@ import store from './store'
 
 const routerOptions = [
   { path: '/', name: 'Home', component: 'Home' },
-  { path: '/create', name: 'Create', component: 'Create' },
+  { path: '/create', name: 'Create', component: 'Create', meta: { requiresAuth: true } },
   { path: '/signin', name: 'Signin', component: 'Signin' },
   { path: '/signout', name: 'Signout', component: 'Signout' },
   { path: '/about', name: 'About', component: 'About' },
-  { path: '/robinchon', name: 'Robinchon', component: 'Robinchon' }
+  { path: '/robinchon', name: 'Robinchon', component: 'Robinchon' },
+  { path: '/admin', name: 'Admin', component: 'Admin', meta: { requiresAuth: true } }
 ]
 
 const routes = routerOptions.map(route => {
@@ -28,6 +29,7 @@ router.beforeEach((to, from, next) => {
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
   const isAuthenticated = store.getters.isAuthenticated
   if (requiresAuth && !isAuthenticated) {
+    console.log('U NEED LOGIN ☝️!')
     next('/signin')
   } else {
     next()
