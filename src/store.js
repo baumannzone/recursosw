@@ -69,17 +69,20 @@ export default new Vuex.Store({
           commit('setLoading', false)
         })
     },
-    userSignInGoogle ({ commit }, payload) {
+    userSignInGoogle ({ commit, dispatch }, payload) {
       commit('setLoading', true)
       auth.signInWithPopup(googleProvider)
         .then(firebaseUser => {
           if (firebaseUser.user) {
             commit('setUser', {
+              id: firebaseUser.user.uid,
+              uid: firebaseUser.user.uid,
               name: firebaseUser.user.displayName,
               email: firebaseUser.user.email
             })
             commit('setLoading', false)
             commit('setError', null)
+            dispatch('getUserData', firebaseUser.user)
             router.push({ name: 'Home' })
           } else {
             throw new Error('Error credentials')
@@ -90,17 +93,20 @@ export default new Vuex.Store({
           commit('setLoading', false)
         })
     },
-    userSignInGithub ({ commit }, payload) {
+    userSignInGithub ({ commit, dispatch }, payload) {
       commit('setLoading', true)
       auth.signInWithPopup(ghProvider)
         .then(firebaseUser => {
           if (firebaseUser.user) {
             commit('setUser', {
+              id: firebaseUser.user.uid,
+              uid: firebaseUser.user.uid,
               name: firebaseUser.user.displayName,
               email: firebaseUser.user.email
             })
             commit('setLoading', false)
             commit('setError', null)
+            dispatch('getUserData', firebaseUser.user)
             router.push({ name: 'Home' })
           } else {
             throw new Error('Error credentials')
@@ -127,18 +133,28 @@ export default new Vuex.Store({
       commit('setUserData', null)
       router.push('/')
     },
-    getUserData ({ commit, state }, user) {
+    getUserData ({ commit, dispatch, state }, user) {
       if (user && user.uid) {
         return db.doc('users/' + user.uid).onSnapshot(
           (snapshot) => {
-            if (!snapshot.exists) return { error: true }
-            const data = { id: user.uid, ...snapshot.data() }
-            data.likes = data.likes || {}
-            data.favs = data.favs || {}
-            if (data.likes) commit('likes', data.likes)
-            if (data.favs) commit('favs', data.favs)
-            commit('setUserData', data)
-            return data
+            if (!snapshot.exists) {
+              const dataUser = {
+                id: user.uid || user.id,
+                displayName: user.displayName,
+                likes: {},
+                favs: {}
+              }
+              dispatch('updateUserData', dataUser)
+              dispatch('setUserData', dataUser)
+            } else {
+              const data = { id: user.uid, ...snapshot.data() }
+              data.likes = data.likes || {}
+              data.favs = data.favs || {}
+              if (data.likes) commit('likes', data.likes)
+              if (data.favs) commit('favs', data.favs)
+              commit('setUserData', data)
+              return data
+            }
           },
           () => {
             commit('setUserData', null)
@@ -150,7 +166,7 @@ export default new Vuex.Store({
     updateUserData ({ commit, state }, payload) {
       if (payload.likes) commit('likes', payload.likes)
       if (payload.favs) commit('favs', payload.favs)
-      db.doc(`users/${state.user.uid}`).set(payload, { merge: true })
+      db.doc(`users/${state.user.uid || payload.id}`).set(payload, { merge: true })
     },
     setUserData ({ commit, state }, payload) {
       commit('setUserData', payload)

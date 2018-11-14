@@ -19,11 +19,11 @@
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items class="hidden-sm-and-down">
-       <!--  <v-text-field
+        <v-text-field
           @change="onSearch()"
           clearable
           append-icon="search"
-          v-model="search"></v-text-field> -->
+          v-model="search"></v-text-field>
         <template v-for="(item, idx) in menuItems">
           <v-btn flat
             v-if="show(item)"

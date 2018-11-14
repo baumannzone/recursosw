@@ -54,7 +54,6 @@ export default {
       })
     },
     more () {
-      console.log('{more}', this.ref)
       this.limit += PAGE
       this.getResources(this.limit)
     }

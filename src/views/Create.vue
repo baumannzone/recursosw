@@ -98,7 +98,11 @@
             </v-flex>
 
             <div class="form-buttons">
-              <v-btn color="primary" @click="submitForm('form')" :disabled="isLoading" :loading="isLoading">Submit</v-btn>
+              <v-btn
+                color="primary"
+                @click="submitForm('form')"
+                :disabled="isLoading"
+                :loading="isLoading">Submit</v-btn>
             </div>
           </v-layout>
         </v-card-text>
@@ -109,6 +113,7 @@
 
 <script>
 import rules from '@/utils/rules'
+import markovThreeChains from '@/utils/markovThreeChains'
 
 export default {
   created () {
@@ -169,7 +174,11 @@ export default {
       this.mainImg.base64 = ''
     },
     submitForm (form) {
+      alert('OYE')
       // const data = { formData: this.form, imgData: this.mainImg }
+      console.log(markovThreeChains([
+        this.form.name, this.form.shortDesc, this.form.fullDesc
+      ]))
       const data = {
         ...this.form,
         createdAt: new Date(),
@@ -177,8 +186,12 @@ export default {
           mainImg: ''
         },
         favsCount: 0,
-        likesCount: 0
+        likesCount: 0,
+        keys: markovThreeChains([
+          this.form.name, this.form.shortDesc, this.form.fullDesc
+        ])
       }
+      console.log({ data })
       this.isLoading = true
       this.$store.dispatch('createResource', data)
         .then((docRef) => {
