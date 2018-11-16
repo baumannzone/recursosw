@@ -12,6 +12,7 @@
   "main": "lib/index.js",
   "dependencies": {
     "@types/jquery": "2.0.34",
+    "algoliasearch": "^3.30.0",
     "firebase-admin": "^6.1.0",
     "firebase-functions": "^2.1.0",
     "fs-extra": "^7.0.1",

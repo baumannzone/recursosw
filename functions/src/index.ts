@@ -4,6 +4,9 @@ import { tmpdir } from 'os'
 import { join, dirname } from 'path'
 import * as sharp from 'sharp'
 import * as fs from 'fs-extra'
+import * as algoliasearch from 'algoliasearch'
+const env = functions.config()
+const client = algoliasearch(env.algolia.appid, env.algolia.apikey)
 
 admin.initializeApp()
 const docs = {
@@ -48,7 +51,7 @@ export const generateThumbs = functions.storage
     const bucketDir = dirname(filePath)
 
     const workingDir = join(tmpdir(), 'thumbs')
-    const tmpFilePath = join(workingDir, 'source.png')
+    const tmpFilePath = join(workingDir, `source${new Date().getTime()}.png`)
 
     if (fileName.includes('thumb@') || !object.contentType.includes('image')) {
       console.log('exiting function')
@@ -103,3 +106,26 @@ export const generateThumbs = functions.storage
     return true
   })
 
+const index = client.initIndex('resources_search')
+
+exports.indexResource = functions.firestore
+  .document('resources/{id}')
+  .onCreate((snap, context) => {
+    const data = snap.data()
+    const objectID = snap.id
+
+    // Add the data to the algolia index
+    return index.addObject({
+      objectID,
+      ...data
+    })
+})
+
+exports.unindexResource = functions.firestore
+  .document('resources/{id}')
+  .onDelete((snap, context) => {
+    const objectId = snap.id
+
+    // Delete an ID from the index
+    return index.deleteObject(objectId)
+})
