@@ -11,7 +11,7 @@
             <v-list subheader>
             <ais-results>
               <template slot-scope="{ result }">
-                <v-list-tile avatar :to="'/resources/'+result.objectID">
+                <v-list-tile avatar @click="go(result.objectID)">
                 <v-list-tile-avatar>
                   <v-icon>label</v-icon>
                 </v-list-tile-avatar>
@@ -52,6 +52,17 @@ export default {
     return {
       searchQuery: '',
       searchMenuVisibility: false
+    }
+  },
+  methods: {
+    go (id) {
+      console.log(this.$router.currentRoute)
+      if (this.$router.currentRoute.name === 'Resource') {
+        this.$router.push({ name: 'Resource', params: { id } })
+        window.location.reload()
+      } else {
+        this.$router.push({ name: 'Resource', params: { id } })
+      }
     }
   }
 }

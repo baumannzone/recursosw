@@ -9,6 +9,7 @@ const routerOptions = [
   { path: '/signout', name: 'Signout', component: 'Signout' },
   { path: '/about', name: 'About', component: 'About' },
   { path: '/robinchon', name: 'Robinchon', component: 'Robinchon' },
+  { path: '/resources/:id', name: 'Resource', component: 'Resource' },
   { path: '/admin', name: 'Admin', component: 'Admin', meta: { requiresAuth: true } }
 ]
 

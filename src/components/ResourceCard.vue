@@ -6,7 +6,7 @@
       </div>
       <div class="resource-content pl-3">
         <div class="top">
-          <div class="title"> {{ data.name }}</div>
+          <div class="title"><a class="resource-title" @click="go(data.id)">{{ data.name }}</a></div>
           <div>{{ data.shortDesc }}</div>
           <template v-if="$store.getters.isAuthenticated">
             <button class="red--text" @click="deleteResource">Delete <small>[{{ data.id }}]</small></button>
@@ -78,6 +78,9 @@ export default {
     ...mapGetters(['isAuthenticated'])
   },
   methods: {
+    go (id) {
+      this.$router.push({ name: 'Resource', params: { id } })
+    },
     deleteResource () {
       this.$store.dispatch('deleteResource', this.data.id)
         .then(() => {
@@ -136,5 +139,7 @@ export default {
         display flex
         flex-direction row
         justify-content space-between
+  .resource-title
+    color DarkSlateGray
 
 </style>
