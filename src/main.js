@@ -8,6 +8,9 @@ import i18n from './i18n'
 import firebase from 'firebase'
 import VueFire from 'vuefire'
 import 'firebase/firestore'
+import InstantSearch from 'vue-instantsearch'
+
+Vue.use(InstantSearch)
 Vue.use(VueFire)
 
 Vue.config.productionTip = false

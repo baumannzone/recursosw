@@ -19,11 +19,7 @@
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items class="hidden-sm-and-down">
-        <v-text-field
-          @change="onSearch()"
-          clearable
-          append-icon="search"
-          v-model="search"></v-text-field>
+        <AlgoliaSearch></AlgoliaSearch>
         <template v-for="(item, idx) in menuItems">
           <v-btn flat
             v-if="show(item)"
@@ -44,7 +40,9 @@
 
 <script>
 // import { debounce } from './utils/debounce'
+import AlgoliaSearch from './components/AlgoliaSearch'
 export default {
+  components: { AlgoliaSearch },
   name: 'App',
   data () {
     return {
