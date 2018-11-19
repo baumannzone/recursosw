@@ -49,7 +49,7 @@ export default {
       search: '',
       drawer: false,
       menuItems: [
-        { displayName: 'Crear', icon: 'add', path: '/create', requireAuth: true },
+        { displayName: 'Create', icon: 'add', path: '/create', requireAuth: true },
         { displayName: 'Login', icon: 'contact_mail', path: '/signin', offAuthenticated: true },
         { displayName: 'Logout', icon: 'contact_mail', path: '/signout', requireAuth: true }
       ]
