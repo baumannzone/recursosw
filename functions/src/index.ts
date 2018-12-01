@@ -9,10 +9,12 @@ const env = functions.config()
 const client = algoliasearch(env.algolia.appid, env.algolia.apikey)
 
 admin.initializeApp()
+
 const docs = {
   likesCount: 'likes',
   favsCount: 'favs'
 }
+
 function counterUpdate (change, column, context) {
   const childRef = change.after.ref
   const parentRef = childRef.parent
@@ -34,6 +36,11 @@ function counterUpdate (change, column, context) {
     .catch(error => console.log(error))
 }
 
+/**
+ * uid = resource id,
+ * id = user id
+ * Cuando se haga like o dislike se ejecuta la funcion `counterUpdate`
+ */
 export const countResourceLikes = functions.firestore.document('/resources/{uid}/likes/{id}')
   .onWrite((change, context) => counterUpdate(change, 'likesCount', context))
 
@@ -53,6 +60,7 @@ export const generateThumbs = functions.storage
     const workingDir = join(tmpdir(), 'thumbs')
     const tmpFilePath = join(workingDir, `source${new Date().getTime()}.png`)
 
+    // Controlar que solo se ejecute en un pàth determinado
     if (fileName.includes('thumb@') || !object.contentType.includes('image')) {
       console.log('exiting function')
       return false
@@ -100,8 +108,9 @@ export const generateThumbs = functions.storage
 
     // 6. set thumbs to firestore
     if (filePath.split('/').length === 2) {
-      admin.firestore().doc(`/resources/${resourceId}`).set({ media: thumbs }, {merge: true})
-      .catch(error => console.log({thumbs: error}))
+      admin.firestore().doc(`/resources/${resourceId}`)
+        .set({ media: thumbs }, {merge: true})
+        .catch(error => console.log({thumbs: error}))
     }
     return true
   })
