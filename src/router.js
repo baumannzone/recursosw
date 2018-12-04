@@ -4,6 +4,7 @@ import store from './store'
 
 const routerOptions = [
   { path: '/', name: 'Home', component: 'Home' },
+  { path: '/tag/:tag', name: 'TagById', component: 'Tag' },
   { path: '/create', name: 'Create', component: 'Create', meta: { requiresAuth: true } },
   { path: '/signin', name: 'Signin', component: 'Signin' },
   { path: '/signout', name: 'Signout', component: 'Signout' },
