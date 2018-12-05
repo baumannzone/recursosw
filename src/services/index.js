@@ -9,6 +9,9 @@ const services = {
     const ref = db.collection('resources').orderBy('createdAt', 'desc').limit(limit)
     if (search) ref.where('name', search)
     return ref
+  },
+  getResourcesByTag (limit, tag) {
+    return db.collection('resources').orderBy('createdAt', 'desc').limit(limit).where('tags', 'array-contains', tag)
   }
 }
 

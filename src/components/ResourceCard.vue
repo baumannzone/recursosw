@@ -20,6 +20,7 @@
               v-for="(tag, idx) in data.tags"
               :key="idx"
               text-color
+              @click="goTo(tag)"
             >
               {{ tag }}
             </v-chip>
@@ -80,6 +81,9 @@ export default {
   methods: {
     go (id) {
       this.$router.push({ name: 'Resource', params: { id } })
+    },
+    goTo (tag) {
+      this.$router.push({ name: 'Tag', params: { tag } })
     },
     deleteResource () {
       this.$store.dispatch('deleteResource', this.data.id)
