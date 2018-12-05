@@ -11,7 +11,7 @@ const services = {
     return ref
   },
   getResourcesByTag (limit, tag) {
-    return db.collection('resources').orderBy('createdAt', 'desc').limit(limit).where('tag', '==', tag)
+    return db.collection('resources').orderBy('createdAt', 'desc').limit(limit).where('tags', 'array-contains', tag)
   }
 }
 

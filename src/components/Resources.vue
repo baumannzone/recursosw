@@ -40,10 +40,11 @@ export default {
       const tag = this.$route.params.tag
       this.ref = services.getResourcesByTag(this.limit, tag)
       this.ref.onSnapshot((snapshot) => {
-        console.log(this.limit, snapshot.docs.length)
+        console.log('>>', this.limit, snapshot.docs.length)
         this.loadMore = this.limit === snapshot.docs.length
         this.resourceList = snapshot.docs
           .map(doc => {
+            console.log('datos:', doc)
             return {
               id: doc.id,
               ...doc.data(),
@@ -52,7 +53,7 @@ export default {
             }
           })
       }, (error) => {
-        console.log('[getResourcesByTag]: ', error.toString())
+        console.warn('[getResourcesByTag]: ', error.toString())
       })
     },
     getResources (limit) {
@@ -70,7 +71,7 @@ export default {
             }
           })
       }, (error) => {
-        console.log('[getResources]: ', error.toString())
+        console.warn('[getResources]: ', error.toString())
       })
     },
     more () {
@@ -92,7 +93,7 @@ export default {
     }
   },
   created () {
-    if (this.$route.name === 'TagById') {
+    if (this.$route.name === 'Tag') {
       this.getResourcesByTag()
     } else {
       this.getResources()
