@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import router from '@/router'
 
-import { db, auth, googleProvider, ghProvider, storage } from './config'
+import { db, auth, ghProvider, storage } from './config'
 
 Vue.use(Vuex)
 
@@ -49,44 +49,6 @@ export default new Vuex.Store({
           commit('setUser', { email: firebaseUser.user.email })
           commit('setLoading', false)
           router.push('/home')
-        })
-        .catch(error => {
-          commit('setError', error.message)
-          commit('setLoading', false)
-        })
-    },
-    userSignIn ({ commit }, payload) {
-      commit('setLoading', true)
-      auth.signInWithEmailAndPassword(payload.email, payload.password)
-        .then(firebaseUser => {
-          commit('setUser', { email: firebaseUser.email })
-          commit('setLoading', false)
-          commit('setError', null)
-          router.push('/home')
-        })
-        .catch(error => {
-          commit('setError', error.message)
-          commit('setLoading', false)
-        })
-    },
-    userSignInGoogle ({ commit, dispatch }, payload) {
-      commit('setLoading', true)
-      auth.signInWithPopup(googleProvider)
-        .then(firebaseUser => {
-          if (firebaseUser.user) {
-            commit('setUser', {
-              id: firebaseUser.user.uid,
-              uid: firebaseUser.user.uid,
-              name: firebaseUser.user.displayName,
-              email: firebaseUser.user.email
-            })
-            commit('setLoading', false)
-            commit('setError', null)
-            dispatch('getUserData', firebaseUser.user)
-            router.push({ name: 'Home' })
-          } else {
-            throw new Error('Error credentials')
-          }
         })
         .catch(error => {
           commit('setError', error.message)
