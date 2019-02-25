@@ -1,4 +1,4 @@
-import '@babel/polyfill'
+// import '@babel/polyfill'
 import Vue from 'vue'
 import './plugins/vuetify'
 import App from './App.vue'
@@ -7,10 +7,7 @@ import store from './store'
 import i18n from './i18n'
 import firebase from 'firebase'
 import VueFire from 'vuefire'
-import 'firebase/firestore'
-import InstantSearch from 'vue-instantsearch'
 
-Vue.use(InstantSearch)
 Vue.use(VueFire)
 
 Vue.config.productionTip = false
@@ -31,7 +28,3 @@ firebase.auth().onAuthStateChanged(user => {
   }
   if (user) store.dispatch('getUserData', user)
 })
-
-export const db = firebase.firestore()
-const settings = { timestampsInSnapshots: true }
-db.settings(settings)

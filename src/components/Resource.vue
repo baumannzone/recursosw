@@ -52,7 +52,7 @@
 </template>
 
 <script>
-import { db } from '../main'
+import { db } from '@/config/index.js'
 import { mapGetters } from 'vuex'
 export default {
   data () {

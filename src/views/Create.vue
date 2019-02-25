@@ -114,7 +114,7 @@
             <div class="form-buttons">
               <v-btn
                 color="primary"
-                @click="submitForm('form')"
+                @click="validateForm('form')"
                 :disabled="isLoading"
                 :loading="isLoading"
               >Submit</v-btn>
@@ -131,18 +131,15 @@ import rules from '@/utils/rules'
 import tagList from '@/utils/tags'
 
 export default {
-  created () {
-    this.rules = rules
-  },
   data: () => {
     return {
       isLoading: false,
       form: {
-        name: '',
-        shortDesc: '',
-        fullDesc: '',
-        link: '',
-        tags: null
+        name: 'asd',
+        shortDesc: 'asd',
+        fullDesc: 'asd',
+        link: 'asd',
+        tags: ['IoT']
       },
       valid: true,
       mainImg: {
@@ -151,7 +148,8 @@ export default {
         type: '',
         base64: ''
       },
-      tagList: tagList
+      rules,
+      tagList
     }
   },
   methods: {
@@ -183,9 +181,20 @@ export default {
       this.mainImg.type = ''
       this.mainImg.base64 = ''
     },
-    submitForm (form) {
+    validateForm (form) {
       if (this.$refs.form.validate()) {
-        const data = {
+        this.submitForm()
+      } else {
+        console.debug('Invalid Form')
+      }
+    },
+    async submitForm () {
+      try {
+        this.isLoading = true
+        const promises = []
+        const docRef = await this.$store.dispatch('createDocRef')
+        const resourceData = {
+          id: docRef.id,
           ...this.form,
           createdAt: new Date(),
           media: {
@@ -194,41 +203,34 @@ export default {
           favsCount: 0,
           likesCount: 0
         }
-        this.isLoading = true
-        this.$store
-          .dispatch('createResource', data)
-          .then(docRef => {
-            const data = {
-              id: docRef.id,
-              img: this.mainImg.base64
-            }
-            this.$store.dispatch('uploadResourceImg', data).then(snapshot => {
-              snapshot.ref.getDownloadURL().then(downloadURL => {
-                console.log('File available at', downloadURL)
-                this.$store
-                  .dispatch('updateResourceImg', {
-                    id: docRef.id,
-                    img: downloadURL
-                  })
-                  .then(() => {
-                    console.log('Document successfully updated!')
-                    this.isLoading = false
-                    this.$router.push('/')
-                  })
-              })
-            })
-          })
-          .catch(err => {
-            console.log('err: ')
-            console.log(err)
-            this.isLoading = false
-          })
-      } else {
-        console.log('NO ES VALIDO')
+        const imgData = {
+          id: docRef.id,
+          file: this.$refs.inputFile.files[0]
+        }
+        promises.push(this.$store.dispatch('createResource', resourceData))
+        promises.push(this.$store.dispatch('uploadResourceImg', imgData))
+
+        const results = await Promise.all(promises)
+
+        // Remove this code when cloud functions be implemented
+        const downloadURL = await results[1].ref.getDownloadURL()
+        await this.$store.dispatch('createResource', {
+          id: docRef.id,
+          media: {
+            mainImg: downloadURL
+          }
+        })
+        // *****************************************************
+        this.isLoading = false
+      } catch (err) {
+        console.log('Error [Submit Form]:')
+        console.log(JSON.stringify(err))
+        this.isLoading = false
       }
     },
-    checkIfEmpty (ev) {
-      if (ev.length === 0) {
+    checkIfEmpty (e) {
+      if (e.length === 0) {
+        // Reset for validation
         this.form.tags = null
       }
     }

@@ -19,15 +19,11 @@
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items class="hidden-sm-and-down">
-        <AlgoliaSearch></AlgoliaSearch>
         <template v-for="(item, idx) in menuItems">
           <v-btn flat
             v-if="show(item)"
             :to="item.path"
             :key="idx">{{ item.displayName }}</v-btn>
-        </template>
-        <template v-if="$route.path === '/robinchon'">
-          <span>{{$store.getters.isAuthenticated}}</span>
         </template>
       </v-toolbar-items>
     </v-toolbar>
@@ -40,9 +36,7 @@
 
 <script>
 // import { debounce } from './utils/debounce'
-import AlgoliaSearch from './components/AlgoliaSearch'
 export default {
-  components: { AlgoliaSearch },
   name: 'App',
   data () {
     return {

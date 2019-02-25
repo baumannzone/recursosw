@@ -1,4 +1,4 @@
-import firebase from 'firebase'
+import firebase from 'firebase/app'
 import 'firebase/firestore'
 import 'firebase/storage'
 import 'firebase/auth'
@@ -11,4 +11,3 @@ export const db = firebaseApp.firestore()
 export const storage = firebaseApp.storage()
 export const googleProvider = new firebase.auth.GoogleAuthProvider()
 export const ghProvider = new firebase.auth.GithubAuthProvider()
-db.settings({ timestampsInSnapshots: true })
