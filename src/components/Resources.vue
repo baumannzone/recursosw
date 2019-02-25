@@ -40,7 +40,7 @@ export default {
       const tag = this.$route.params.tag
       this.ref = services.getResourcesByTag(this.limit, tag)
       this.ref.onSnapshot((snapshot) => {
-        console.log('>>', this.limit, snapshot.docs.length)
+        // console.log('>>', this.limit, snapshot.docs.length)
         this.loadMore = this.limit === snapshot.docs.length
         this.resourceList = snapshot.docs
           .map(doc => {
@@ -59,7 +59,7 @@ export default {
     getResources (limit) {
       this.ref = services.getResources(limit || this.limit, this.search)
       this.ref.onSnapshot((snapshot) => {
-        console.log(this.limit, snapshot.docs.length)
+        // console.log(this.limit, snapshot.docs.length)
         this.loadMore = this.limit === snapshot.docs.length
         this.resourceList = snapshot.docs
           .map(doc => {
@@ -81,7 +81,7 @@ export default {
   },
   watch: {
     getUserData () {
-      console.log('...watching...', this.getUserData)
+      // console.log('...watching...', this.getUserData)
       this.resourceList = this.resourceList
         .map(item => {
           return {

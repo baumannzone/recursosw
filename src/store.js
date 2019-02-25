@@ -134,20 +134,32 @@ export default new Vuex.Store({
       commit('setUserData', payload)
     },
     removeFav ({ commit, state }, id) {
-      db.doc(`resources/${id}/favs/${state.user.uid}`).delete()
+      db.doc(`${resources}/${id}/favs/${state.user.uid}`).delete()
     },
     removeLike ({ commit, state }, id) {
-      db.doc(`resources/${id}/likes/${state.user.uid}`).delete()
+      db.doc(`${resources}/${id}/likes/${state.user.uid}`).delete()
     },
-    createResource ({ commit }, payload) {
-      return db.collection(resources).add(payload)
+    // createResource ({ commit }, payload) {
+    //   return db.collection(resources).add(payload)
+    // },
+    createResource ({ commit }, { id, ...payload }) {
+      return db.collection('resources').doc(id).set(payload, { merge: true })
     },
-    uploadResourceImg ({ commit }, { id, img }) {
+    createDocRef () {
+      return db.collection(resources).doc()
+    },
+    uploadResourceImg ({ commit }, { id, file }) {
       return storage
-        .ref(`${id}/`)
+        .ref(`${resources}/${id}/`)
         .child('mainImg')
-        .putString(img, 'data_url', { contentType: 'image/png' })
+        .put(file)
     },
+    // uploadResourceImg ({ commit }, { id, img }) {
+    //   return storage
+    //     .ref(`${id}/`)
+    //     .child('mainImg')
+    //     .putString(img, 'data_url', { contentType: 'image/png' })
+    // },
     updateResourceImg ({ commit }, { id, img }) {
       return db.collection(resources).doc(id)
         .update({
@@ -160,12 +172,12 @@ export default new Vuex.Store({
     favResource ({ commit, state }, id) {
       const userId = state.userData.id
       const data = { [userId]: true }
-      return db.doc(`resources/${id}/favs/${userId}`).set(data)
+      return db.doc(`${resources}/${id}/favs/${userId}`).set(data)
     },
     likeResource ({ commit, state }, id) {
       const userId = state.userData.id
       const data = { [userId]: true }
-      return db.doc(`resources/${id}/likes/${userId}`).set(data)
+      return db.doc(`${resources}/${id}/likes/${userId}`).set(data)
     },
     search ({ commit }, payload) {
       commit('search', payload)

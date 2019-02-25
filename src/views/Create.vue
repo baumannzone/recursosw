@@ -6,6 +6,7 @@
           <v-flex xs12>
             <div>
               <h2 class="headline">Publica un nuevo recurso</h2>
+              <!-- Random text -->
               <span class="grey--text">My super duper new resource</span>
             </div>
           </v-flex>
@@ -21,7 +22,7 @@
                 v-model="form.name"
                 :rules="[rules.required]"
                 label="Name"
-                placeholder="Name"
+                placeholder="Just the title"
                 required
               ></v-text-field>
             </v-flex>
@@ -30,36 +31,41 @@
             <v-flex sm6 xs12>
               <v-text-field
                 v-model="form.shortDesc"
-                :rules="[rules.required]"
+                :rules="[rules.required, rules.max60]"
                 label="Short description"
                 counter="60"
-                placeholder="Description"
+                placeholder="Short description"
                 required
               ></v-text-field>
             </v-flex>
 
-            <!--Link-->
+            <!-- Link -->
+            <!-- TODO: Check link format -->
+            <!-- https://www.regextester.com/93652 -->
             <v-flex sm6 xs12>
               <v-text-field
                 v-model="form.link"
                 :rules="[rules.required]"
                 label="Link"
-                placeholder="https://medium.com/"
+                placeholder="Example: https://osweekends.com/"
                 required
               ></v-text-field>
             </v-flex>
 
+            <!-- Dropdown Tags -->
             <v-flex sm6 xs12>
               <v-select
                 v-model="form.tags"
                 :rules="[rules.required]"
                 :items="tagList"
                 placeholder="Tags"
+                @change="checkIfEmpty"
                 multiple
                 label="Tags"
               ></v-select>
             </v-flex>
 
+            <!-- Long desc -->
             <v-flex xs12>
               <v-textarea
                 label="Full description"
@@ -74,6 +80,7 @@
               <h4>Media</h4>
             </v-flex>
 
+            <!-- InputFile -->
             <v-flex sm6 xs12>
               <v-text-field
                 v-model="form.imgName"
@@ -96,16 +103,18 @@
               >
             </v-flex>
 
+            <!-- Image Preview -->
             <v-flex sm6 xs12>
               <template v-if="mainImg.base64">
                 <img :src="mainImg.base64" class="main-img-preview" alt="Main resource Image">
               </template>
             </v-flex>
 
+            <!-- Submit btn -->
             <div class="form-buttons">
               <v-btn
                 color="primary"
-                @click="submitForm('form')"
+                @click="validateForm('form')"
                 :disabled="isLoading"
                 :loading="isLoading"
               >Submit</v-btn>
@@ -120,12 +129,8 @@
 <script>
 import rules from '@/utils/rules'
 import tagList from '@/utils/tags'
-// import markovThreeChains from '@/utils/markovThreeChains'
 
 export default {
-  created () {
-    this.rules = rules
-  },
   data: () => {
     return {
       isLoading: false,
@@ -143,12 +148,12 @@ export default {
         type: '',
         base64: ''
       },
-      tagList: tagList
+      rules,
+      tagList
     }
   },
   methods: {
     changeFile (ev) {
-      console.log(ev)
       if (ev.target.files.length > 0) {
         const file = ev.target.files[0]
         this.form.imgName = file.name
@@ -176,10 +181,20 @@ export default {
       this.mainImg.type = ''
       this.mainImg.base64 = ''
     },
-    submitForm (form) {
+    validateForm (form) {
       if (this.$refs.form.validate()) {
-        console.log('ES VALIDO!!')
-        const data = {
+        this.submitForm()
+      } else {
+        console.debug('Invalid Form')
+      }
+    },
+    async submitForm () {
+      try {
+        this.isLoading = true
+        const promises = []
+        const docRef = await this.$store.dispatch('createDocRef')
+        const resourceData = {
+          id: docRef.id,
           ...this.form,
           createdAt: new Date(),
           media: {
@@ -187,53 +202,37 @@ export default {
           },
           favsCount: 0,
           likesCount: 0
-          // keys: markovThreeChains([
-          //   this.form.name,
-          //   this.form.shortDesc,
-          //   this.form.fullDesc
-          // ])
         }
-        console.log({ data })
-        this.isLoading = true
-        this.$store
-          .dispatch('createResource', data)
-          .then(docRef => {
-            const data = {
-              id: docRef.id,
-              img: this.mainImg.base64
-            }
-            this.$store.dispatch('uploadResourceImg', data).then(snapshot => {
-              snapshot.ref.getDownloadURL().then(downloadURL => {
-                console.log('File available at', downloadURL)
-                this.$store
-                  .dispatch('updateResourceImg', {
-                    id: docRef.id,
-                    img: downloadURL
-                  })
-                  .then(() => {
-                    console.log('Document successfully updated!')
-                    this.isLoading = false
-                    this.$router.push('/')
-                  })
-              })
-            })
-          })
-          .catch(err => {
-            console.log('err: ')
-            console.log(err)
-            this.isLoading = false
-          })
-      } else {
-        console.log('NO ES VALIDO')
+        const imgData = {
+          id: docRef.id,
+          file: this.$refs.inputFile.files[0]
+        }
+        promises.push(this.$store.dispatch('createResource', resourceData))
+        promises.push(this.$store.dispatch('uploadResourceImg', imgData))
+
+        const results = await Promise.all(promises)
+
+        // Remove this code when cloud functions be implemented
+        const downloadURL = await results[1].ref.getDownloadURL()
+        await this.$store.dispatch('createResource', {
+          id: docRef.id,
+          media: {
+            mainImg: downloadURL
+          }
+        })
+        // *****************************************************
+        this.isLoading = false
+      } catch (err) {
+        console.log('Error [Submit Form]:')
+        console.log(JSON.stringify(err))
+        this.isLoading = false
       }
-      // const data = { formData: this.form, imgData: this.mainImg }
-      // console.log(
-      //   markovThreeChains([
-      //     this.form.name,
-      //     this.form.shortDesc,
-      //     this.form.fullDesc
-      //   ])
-      // )
+    },
+    checkIfEmpty (e) {
+      if (e.length === 0) {
+        // Reset for validation
+        this.form.tags = null
+      }
     }
   }
 }
