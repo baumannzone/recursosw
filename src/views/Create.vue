@@ -6,6 +6,7 @@
           <v-flex xs12>
             <div>
               <h2 class="headline">Publica un nuevo recurso</h2>
+              <!-- Random text -->
               <span class="grey--text">My super duper new resource</span>
             </div>
           </v-flex>
@@ -21,7 +22,7 @@
                 v-model="form.name"
                 :rules="[rules.required]"
                 label="Name"
-                placeholder="Name"
+                placeholder="Just the title"
                 required
               ></v-text-field>
             </v-flex>
@@ -30,36 +31,41 @@
             <v-flex sm6 xs12>
               <v-text-field
                 v-model="form.shortDesc"
-                :rules="[rules.required]"
+                :rules="[rules.required, rules.max60]"
                 label="Short description"
                 counter="60"
-                placeholder="Description"
+                placeholder="Short description"
                 required
               ></v-text-field>
             </v-flex>
 
-            <!--Link-->
+            <!-- Link -->
+            <!-- TODO: Check link format -->
+            <!-- https://www.regextester.com/93652 -->
             <v-flex sm6 xs12>
               <v-text-field
                 v-model="form.link"
                 :rules="[rules.required]"
                 label="Link"
-                placeholder="https://medium.com/"
+                placeholder="Example: https://osweekends.com/"
                 required
               ></v-text-field>
             </v-flex>
 
+            <!-- Dropdown Tags -->
             <v-flex sm6 xs12>
               <v-select
                 v-model="form.tags"
                 :rules="[rules.required]"
                 :items="tagList"
                 placeholder="Tags"
+                @change="checkIfEmpty"
                 multiple
                 label="Tags"
               ></v-select>
             </v-flex>
 
+            <!-- Long desc -->
             <v-flex xs12>
               <v-textarea
                 label="Full description"
@@ -74,6 +80,7 @@
               <h4>Media</h4>
             </v-flex>
 
+            <!-- InputFile -->
             <v-flex sm6 xs12>
               <v-text-field
                 v-model="form.imgName"
@@ -96,12 +103,14 @@
               >
             </v-flex>
 
+            <!-- Image Preview -->
             <v-flex sm6 xs12>
               <template v-if="mainImg.base64">
                 <img :src="mainImg.base64" class="main-img-preview" alt="Main resource Image">
               </template>
             </v-flex>
 
+            <!-- Submit btn -->
             <div class="form-buttons">
               <v-btn
                 color="primary"
@@ -120,7 +129,6 @@
 <script>
 import rules from '@/utils/rules'
 import tagList from '@/utils/tags'
-// import markovThreeChains from '@/utils/markovThreeChains'
 
 export default {
   created () {
@@ -148,7 +156,6 @@ export default {
   },
   methods: {
     changeFile (ev) {
-      console.log(ev)
       if (ev.target.files.length > 0) {
         const file = ev.target.files[0]
         this.form.imgName = file.name
@@ -178,7 +185,6 @@ export default {
     },
     submitForm (form) {
       if (this.$refs.form.validate()) {
-        console.log('ES VALIDO!!')
         const data = {
           ...this.form,
           createdAt: new Date(),
@@ -187,13 +193,7 @@ export default {
           },
           favsCount: 0,
           likesCount: 0
-          // keys: markovThreeChains([
-          //   this.form.name,
-          //   this.form.shortDesc,
-          //   this.form.fullDesc
-          // ])
         }
-        console.log({ data })
         this.isLoading = true
         this.$store
           .dispatch('createResource', data)
@@ -226,14 +226,11 @@ export default {
       } else {
         console.log('NO ES VALIDO')
       }
-      // const data = { formData: this.form, imgData: this.mainImg }
-      // console.log(
-      //   markovThreeChains([
-      //     this.form.name,
-      //     this.form.shortDesc,
-      //     this.form.fullDesc
-      //   ])
-      // )
+    },
+    checkIfEmpty (ev) {
+      if (ev.length === 0) {
+        this.form.tags = null
+      }
     }
   }
 }
