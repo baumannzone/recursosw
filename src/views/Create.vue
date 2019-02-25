@@ -1,5 +1,5 @@
 <template>
-  <form ref="form" class="full-width">
+  <v-form ref="form" class="full-width" v-model="valid">
     <v-container grid-list-md>
       <v-card flat>
         <v-card-title primary-title>
@@ -22,7 +22,8 @@
                 :rules="[rules.required]"
                 label="Name"
                 placeholder="Name"
-                required></v-text-field>
+                required
+              ></v-text-field>
             </v-flex>
 
             <!--Short desc-->
@@ -33,7 +34,8 @@
                 label="Short description"
                 counter="60"
                 placeholder="Description"
-                required></v-text-field>
+                required
+              ></v-text-field>
             </v-flex>
 
             <!--Link-->
@@ -43,7 +45,8 @@
                 :rules="[rules.required]"
                 label="Link"
                 placeholder="https://medium.com/"
-                required></v-text-field>
+                required
+              ></v-text-field>
             </v-flex>
 
             <v-flex sm6 xs12>
@@ -82,13 +85,15 @@
                 @click="$refs.inputFile.click()"
                 @click:clear="clearImage"
                 placeholder="Select image"
-                required></v-text-field>
+                required
+              ></v-text-field>
               <input
                 type="file"
                 ref="inputFile"
                 class="input-file"
                 @input="changeFile"
-                accept="image/*">
+                accept="image/*"
+              >
             </v-flex>
 
             <v-flex sm6 xs12>
@@ -102,18 +107,20 @@
                 color="primary"
                 @click="submitForm('form')"
                 :disabled="isLoading"
-                :loading="isLoading">Submit</v-btn>
+                :loading="isLoading"
+              >Submit</v-btn>
             </div>
           </v-layout>
         </v-card-text>
       </v-card>
     </v-container>
-  </form>
+  </v-form>
 </template>
 
 <script>
 import rules from '@/utils/rules'
-import markovThreeChains from '@/utils/markovThreeChains'
+import tagList from '@/utils/tags'
+// import markovThreeChains from '@/utils/markovThreeChains'
 
 export default {
   created () {
@@ -127,7 +134,7 @@ export default {
         shortDesc: '',
         fullDesc: '',
         link: '',
-        tags: []
+        tags: null
       },
       valid: true,
       mainImg: {
@@ -136,30 +143,26 @@ export default {
         type: '',
         base64: ''
       },
-      tagList: [
-        'Developer Tools',
-        'Web Apps',
-        'Productivity',
-        'IoT',
-        'Marketing',
-        'Hacking',
-        'Books'
-      ]
+      tagList: tagList
     }
   },
   methods: {
     changeFile (ev) {
       console.log(ev)
       if (ev.target.files.length > 0) {
-        const file = ev.target.files[ 0 ]
+        const file = ev.target.files[0]
         this.form.imgName = file.name
         const reader = new FileReader()
-        reader.addEventListener('load', () => {
-          this.mainImg.name = file.name
-          this.mainImg.size = file.size
-          this.mainImg.type = file.type
-          this.mainImg.base64 = reader.result
-        }, false)
+        reader.addEventListener(
+          'load',
+          () => {
+            this.mainImg.name = file.name
+            this.mainImg.size = file.size
+            this.mainImg.type = file.type
+            this.mainImg.base64 = reader.result
+          },
+          false
+        )
         // FileReader.readAsDataURL()
         reader.readAsDataURL(file)
       } else {
@@ -174,69 +177,85 @@ export default {
       this.mainImg.base64 = ''
     },
     submitForm (form) {
-      alert('OYE')
-      // const data = { formData: this.form, imgData: this.mainImg }
-      console.log(markovThreeChains([
-        this.form.name, this.form.shortDesc, this.form.fullDesc
-      ]))
-      const data = {
-        ...this.form,
-        createdAt: new Date(),
-        media: {
-          mainImg: ''
-        },
-        favsCount: 0,
-        likesCount: 0,
-        keys: markovThreeChains([
-          this.form.name, this.form.shortDesc, this.form.fullDesc
-        ])
-      }
-      console.log({ data })
-      this.isLoading = true
-      this.$store.dispatch('createResource', data)
-        .then((docRef) => {
-          const data = {
-            id: docRef.id,
-            img: this.mainImg.base64
-          }
-          this.$store.dispatch('uploadResourceImg', data)
-            .then((snapshot) => {
-              snapshot.ref.getDownloadURL()
-                .then((downloadURL) => {
-                  console.log('File available at', downloadURL)
-                  this.$store.dispatch('updateResourceImg', { id: docRef.id, img: downloadURL })
-                    .then(() => {
-                      console.log('Document successfully updated!')
-                      this.isLoading = false
-                      this.$router.push('/')
-                    })
-                })
+      if (this.$refs.form.validate()) {
+        console.log('ES VALIDO!!')
+        const data = {
+          ...this.form,
+          createdAt: new Date(),
+          media: {
+            mainImg: ''
+          },
+          favsCount: 0,
+          likesCount: 0
+          // keys: markovThreeChains([
+          //   this.form.name,
+          //   this.form.shortDesc,
+          //   this.form.fullDesc
+          // ])
+        }
+        console.log({ data })
+        this.isLoading = true
+        this.$store
+          .dispatch('createResource', data)
+          .then(docRef => {
+            const data = {
+              id: docRef.id,
+              img: this.mainImg.base64
+            }
+            this.$store.dispatch('uploadResourceImg', data).then(snapshot => {
+              snapshot.ref.getDownloadURL().then(downloadURL => {
+                console.log('File available at', downloadURL)
+                this.$store
+                  .dispatch('updateResourceImg', {
+                    id: docRef.id,
+                    img: downloadURL
+                  })
+                  .then(() => {
+                    console.log('Document successfully updated!')
+                    this.isLoading = false
+                    this.$router.push('/')
+                  })
+              })
             })
-        })
-        .catch((err) => {
-          console.log('err: ')
-          console.log(err)
-          this.isLoading = false
-        })
+          })
+          .catch(err => {
+            console.log('err: ')
+            console.log(err)
+            this.isLoading = false
+          })
+      } else {
+        console.log('NO ES VALIDO')
+      }
+      // const data = { formData: this.form, imgData: this.mainImg }
+      // console.log(
+      //   markovThreeChains([
+      //     this.form.name,
+      //     this.form.shortDesc,
+      //     this.form.fullDesc
+      //   ])
+      // )
     }
   }
 }
-
 </script>
 
 <style scoped lang="stylus">
-  .full-width
-    width 100%
+.full-width {
+  width: 100%;
+}
 
-  .input-file
-    display none
+.input-file {
+  display: none;
+}
 
-  .main-img-preview
-    width 150px
-    max-height 200px
+.main-img-preview {
+  width: 150px;
+  max-height: 200px;
+}
 
-  .form-buttons
-    width 100%
-    display flex
-    justify-content flex-end
+.form-buttons {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}
 </style>
