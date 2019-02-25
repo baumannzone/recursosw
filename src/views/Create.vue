@@ -135,11 +135,11 @@ export default {
     return {
       isLoading: false,
       form: {
-        name: 'asd',
-        shortDesc: 'asd',
-        fullDesc: 'asd',
-        link: 'asd',
-        tags: ['IoT']
+        name: '',
+        shortDesc: '',
+        fullDesc: '',
+        link: '',
+        tags: null
       },
       valid: true,
       mainImg: {
