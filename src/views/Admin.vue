@@ -5,13 +5,9 @@
 </template>
 
 <script>
-import rules from '@/utils/rules'
 
 export default {
   name: 'Admin',
-  created () {
-    this.rules = rules
-  },
   data: () => {
     return {
       isLoading: false

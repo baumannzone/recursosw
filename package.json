@@ -6,9 +6,11 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "test:unit": "vue-cli-service test:unit",
+    "styleguide": "vue-cli-service styleguidist",
+    "styleguide:build": "vue-cli-service styleguidist:build",
     "test:e2e": "vue-cli-service test:e2e",
-    "test:e2e-cmd": "cypress run"
+    "test:e2e-cmd": "cypress run",
+    "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
     "@babel/polyfill": "^7.0.0-rc.1",
@@ -38,6 +40,7 @@
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.2",
     "vue-cli-plugin-i18n": "^0.5.1",
+    "vue-cli-plugin-styleguidist": "^1.0.5",
     "vue-cli-plugin-vuetify": "^0.3.0",
     "vue-template-compiler": "^2.5.17",
     "vuetify-loader": "^1.0.5"

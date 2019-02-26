@@ -60,16 +60,8 @@ export default {
         return this.$store.getters.isAuthenticated
       }
       return true
-    },
-    onSearch () {
-      this.$store.dispatch('search', this.search)
     }
   }
-  // watch: {
-  //   search: debounce(() => {
-  //     this.$store.dispatch('search', this.search)
-  //   })
-  // }
 }
 </script>
 
