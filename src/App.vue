@@ -40,7 +40,6 @@ export default {
   name: 'App',
   data () {
     return {
-      search: '',
       drawer: false,
       menuItems: [
         { displayName: 'Create', icon: 'add', path: '/create', requireAuth: true },
