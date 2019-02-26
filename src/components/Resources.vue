@@ -90,6 +90,13 @@ export default {
             favourited: !!this.getUserData && !!this.getUserData.favs[ item.id ]
           }
         })
+    },
+    '$route' (to, from) {
+      // react to route changes
+      // Se dispara al cambiar de 'Tag'
+      if (to.name === 'Tag' && to.params.tag !== from.params.tag) {
+        this.getResourcesByTag()
+      }
     }
   },
   created () {
