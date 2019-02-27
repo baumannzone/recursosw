@@ -5,10 +5,8 @@ function onSignUp (user, context) {
     id: user.uid,
     createdAt: new Date(),
     email: user.email || user.email || '',
-    photo: user.photoURL || user.photoURL || '',
-    photoUrl: user.photoURL || user.photoURL || '',
+    photoUrl: user.photoURL || '',
     displayName: user.displayName || user.email.split('@')[0] || 'Stranger',
-    name: user.displayName || user.email.split('@')[0] || 'Stranger',
     roles: {
       user: true
     },
