@@ -14,7 +14,6 @@ export default new Vuex.Store({
     user: null,
     likes: {},
     favs: {},
-    search: '',
     error: null,
     loading: false
   },
@@ -36,9 +35,6 @@ export default new Vuex.Store({
     },
     favs (state, payload) {
       state.favs = payload
-    },
-    search (state, payload) {
-      state.search = payload
     }
   },
   actions: {
@@ -178,9 +174,6 @@ export default new Vuex.Store({
       const userId = state.userData.id
       const data = { [userId]: true }
       return db.doc(`${resources}/${id}/likes/${userId}`).set(data)
-    },
-    search ({ commit }, payload) {
-      commit('search', payload)
     }
   },
   getters: {
@@ -189,7 +182,6 @@ export default new Vuex.Store({
     },
     getUserData: (state) => (state.userData),
     likes: (state) => (state.likes),
-    favs: (state) => (state.favs),
-    search: (state) => (state.search)
+    favs: (state) => (state.favs)
   }
 })
