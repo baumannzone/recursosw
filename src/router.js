@@ -9,7 +9,8 @@ const routerOptions = [
   { path: '/signin', name: 'Signin', component: 'Signin' },
   { path: '/signout', name: 'Signout', component: 'Signout' },
   { path: '/resources/:id', name: 'Resource', component: 'Resource' },
-  { path: '/admin', name: 'Admin', component: 'Admin', meta: { requiresAuth: true } }
+  { path: '/admin', name: 'Admin', component: 'Admin', meta: { requiresAuth: true } },
+  { path: '*', name: 'NotFound', component: 'NotFound' }
 ]
 
 const routes = routerOptions.map(route => {
