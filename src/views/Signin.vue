@@ -45,9 +45,6 @@ export default {
     userSignIn () {
       this.$store.dispatch('userSignIn', { email: this.email, password: this.password })
     },
-    googleSignIn () {
-      this.$store.dispatch('userSignInGoogle')
-    },
     ghSignIn () {
       this.$store.dispatch('userSignInGithub')
     }
