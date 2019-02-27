@@ -15,7 +15,8 @@
     <v-toolbar app temporary fixed class="elevation-0">
       <v-toolbar-side-icon @click.stop="drawer = !drawer" class="hidden-md-and-up"/>
       <v-toolbar-title class="headline text-uppercase cursor" @click="goHome">
-        <span>Recurs<span class="font-weight-light">OSW</span></span>
+        <!-- i18n Working -->
+        <span>{{ $t('recurs') }}<span class="font-weight-light">{{ $t('OSW') }}</span></span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items class="hidden-sm-and-down">
@@ -42,9 +43,10 @@ export default {
     return {
       drawer: false,
       menuItems: [
+        { displayName: 'Admin', icon: 'star', path: '/admin', requireAuth: true, requireAdmin: true },
         { displayName: 'Create', icon: 'add', path: '/create', requireAuth: true },
-        { displayName: 'Login', icon: 'contact_mail', path: '/signin', offAuthenticated: true },
-        { displayName: 'Logout', icon: 'contact_mail', path: '/signout', requireAuth: true }
+        { displayName: 'Sign In', icon: 'contact_mail', path: '/signin', offAuthenticated: true },
+        { displayName: 'Sign out', icon: 'reply', path: '/signout', requireAuth: true }
       ]
     }
   },
@@ -52,10 +54,17 @@ export default {
     goHome () {
       this.$router.push('/')
     },
+    // Make this more readable
+    // isLoggedIn
+    // isAdmin
+    // ...
     show (item) {
       if (item.offAuthenticated) {
         return !this.$store.getters.isAuthenticated
       } else if (item.requireAuth) {
+        if (item.requireAdmin) {
+          console.debug('Admin only!')
+        }
         return this.$store.getters.isAuthenticated
       }
       return true

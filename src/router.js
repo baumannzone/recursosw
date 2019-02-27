@@ -4,12 +4,12 @@ import store from './store'
 
 const routerOptions = [
   { path: '/', name: 'Home', component: 'Home' },
+  { path: '/resources/:id', name: 'Resource', component: 'Resource' },
   { path: '/tags/:tag', name: 'Tag', component: 'Tag' },
   { path: '/create', name: 'Create', component: 'Create', meta: { requiresAuth: true } },
-  { path: '/signin', name: 'Signin', component: 'Signin' },
-  { path: '/signout', name: 'Signout', component: 'Signout' },
-  { path: '/resources/:id', name: 'Resource', component: 'Resource' },
   { path: '/admin', name: 'Admin', component: 'Admin', meta: { requiresAuth: true } },
+  { path: '/signout', name: 'Signout', component: 'Signout' },
+  { path: '/signin', name: 'Signin', component: 'Signin' },
   { path: '*', name: 'NotFound', component: 'NotFound' }
 ]
 

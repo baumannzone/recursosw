@@ -30,7 +30,7 @@ export default {
     loadMore: true
   }),
   computed: {
-    ...mapGetters([ 'getUserData', 'search' ]),
+    ...mapGetters([ 'getUserData' ]),
     resources () {
       return this.resourceList
     }

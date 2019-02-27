@@ -1,7 +1,13 @@
 <template>
-  <section class="admin">
-    <h1>Admin page</h1>
-  </section>
+  <v-container>
+      <v-layout row wrap>
+        <v-flex xs12>
+          <div class="admin">
+            <h1>Admin Page</h1>
+          </div>
+        </v-flex>
+      </v-layout>
+    </v-container>
 </template>
 
 <script>
