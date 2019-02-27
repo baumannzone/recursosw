@@ -4,7 +4,7 @@ import { tmpdir } from 'os'
 import { join, dirname } from 'path'
 import * as sharp from 'sharp'
 import * as fs from 'fs-extra'
-import onSignUp from 'onSignUp'
+import onSignUp from './onSignUp'
 import * as algoliasearch from 'algoliasearch'
 const env = functions.config()
 const client = algoliasearch(env.algolia.appid, env.algolia.apikey)
