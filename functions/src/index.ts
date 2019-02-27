@@ -140,4 +140,5 @@ exports.unindexResource = functions.firestore
     return index.deleteObject(objectId)
 })
 
+// When some user is logged in the app
 export const onSignUpFunc = functions.auth.user().onCreate(onSignUp);
