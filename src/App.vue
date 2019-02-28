@@ -16,7 +16,7 @@
       <v-toolbar-side-icon @click.stop="drawer = !drawer" class="hidden-md-and-up"/>
       <v-toolbar-title class="headline text-uppercase cursor" @click="goHome">
         <!-- i18n Working -->
-        <span>{{ $t('recurs') }}<span class="font-weight-light">{{ $t('OSW') }}</span></span>
+        <span>{{ $t('title.recurs') }}<span class="font-weight-light">{{ $t('title.OSW') }}</span></span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items class="hidden-sm-and-down">
@@ -55,12 +55,6 @@ export default {
   data () {
     return {
       drawer: false,
-      menuItems: [
-        { displayName: 'Admin', icon: 'star', path: '/admin', requireAuth: true, requireAdmin: true },
-        { displayName: 'Create', icon: 'add', path: '/create', requireAuth: true },
-        { displayName: 'Sign In', icon: 'contact_mail', path: '/signin', offAuthenticated: true },
-        { displayName: 'Sign out', icon: 'reply', path: '/signout', requireAuth: true }
-      ],
       lang: [
         { title: 'ES' },
         { title: 'EN' }
@@ -70,6 +64,14 @@ export default {
   computed: {
     currentLang () {
       return this.$i18n.locale.toUpperCase()
+    },
+    menuItems () {
+      return [
+        { displayName: this.$t('navMenu.admin'), icon: 'star', path: '/admin', requireAuth: true, requireAdmin: true },
+        { displayName: this.$t('navMenu.create'), icon: 'add', path: '/create', requireAuth: true },
+        { displayName: this.$t('navMenu.signIn'), icon: 'contact_mail', path: '/signin', offAuthenticated: true },
+        { displayName: this.$t('navMenu.signOut'), icon: 'reply', path: '/signout', requireAuth: true }
+      ]
     }
   },
   methods: {
@@ -92,8 +94,6 @@ export default {
       return true
     },
     selectLanguage (lang) {
-      console.log('lang:')
-      console.log(lang)
       this.$i18n.locale = lang.title.toLowerCase()
     }
   }
