@@ -26,6 +26,19 @@
             :to="item.path"
             :key="idx">{{ item.displayName }}</v-btn>
         </template>
+        <!-- Lang Selector -->
+        <v-menu bottom left>
+          <v-btn slot="activator" flat>
+            {{ currentLang }}
+            <v-icon>language</v-icon>
+          </v-btn>
+
+          <v-list>
+            <v-list-tile v-for="(l, i) in lang" :key="i" @click="selectLanguage(l)">
+              <v-list-tile-title>{{ l.title }}</v-list-tile-title>
+            </v-list-tile>
+          </v-list>
+        </v-menu>
       </v-toolbar-items>
     </v-toolbar>
 
@@ -47,7 +60,16 @@ export default {
         { displayName: 'Create', icon: 'add', path: '/create', requireAuth: true },
         { displayName: 'Sign In', icon: 'contact_mail', path: '/signin', offAuthenticated: true },
         { displayName: 'Sign out', icon: 'reply', path: '/signout', requireAuth: true }
+      ],
+      lang: [
+        { title: 'ES' },
+        { title: 'EN' }
       ]
+    }
+  },
+  computed: {
+    currentLang () {
+      return this.$i18n.locale.toUpperCase()
     }
   },
   methods: {
@@ -68,6 +90,11 @@ export default {
         return this.$store.getters.isAuthenticated
       }
       return true
+    },
+    selectLanguage (lang) {
+      console.log('lang:')
+      console.log(lang)
+      this.$i18n.locale = lang.title.toLowerCase()
     }
   }
 }
