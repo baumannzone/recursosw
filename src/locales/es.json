@@ -1,4 +1,24 @@
 {
-  "recurs": "Recurs",
-  "OSW": "OSW"
+  "title": {
+    "recurs": "Recurs",
+    "OSW": "OSW"
+  },
+  "signIn": {
+    "signIn": "Iniciar sesión"
+  },
+  "navMenu": {
+    "admin": "Admin",
+    "create": "Crear",
+    "signIn": "Conectarse",
+    "signOut": "Desconectarse"
+  },
+  "createForm": {
+    "postNew": {
+      "title": "Publicar un nuevo recurso",
+      "subTitle": "Mi nuevo super duper recurso"
+    },
+    "info": "Info",
+    "media": "Media",
+    "submitBtn": "Enviar"
+  } 
 }

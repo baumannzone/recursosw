@@ -44,7 +44,7 @@ export default {
         this.loadMore = this.limit === snapshot.docs.length
         this.resourceList = snapshot.docs
           .map(doc => {
-            console.log('datos:', doc)
+            // console.log('datos:', doc)
             return {
               id: doc.id,
               ...doc.data(),
