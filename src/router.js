@@ -8,8 +8,8 @@ const routerOptions = [
   { path: '/tags/:tag', name: 'Tag', componentPath: 'Tag' },
   { path: '/create', name: 'Create', componentPath: 'Create', meta: { requiresAuth: true } },
   { path: '/admin', name: 'Admin', componentPath: 'Admin', meta: { requiresAuth: true } },
-  { path: '/signout', name: 'Signout', componentPath: 'SignOut' },
-  { path: '/signin', name: 'Signin', componentPath: 'SignIn' },
+  { path: '/signin', name: 'SignIn', componentPath: 'SignIn' },
+  { path: '/signout', name: 'SignOut', componentPath: 'SignOut' },
   { path: '*', name: 'NotFound', componentPath: 'NotFound' }
 ]
 
