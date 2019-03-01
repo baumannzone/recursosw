@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import ResourcesList from '../components/ResourcesList'
+import ResourcesList from '@/components/ResourcesList'
 
 export default {
   components: {

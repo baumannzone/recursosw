@@ -3,20 +3,20 @@ import Router from 'vue-router'
 import store from './store'
 
 const routerOptions = [
-  { path: '/', name: 'Home', component: 'Home' },
-  { path: '/resources/:id', name: 'Resource', component: 'Resource' },
-  { path: '/tags/:tag', name: 'Tag', component: 'Tag' },
-  { path: '/create', name: 'Create', component: 'Create', meta: { requiresAuth: true } },
-  { path: '/admin', name: 'Admin', component: 'Admin', meta: { requiresAuth: true } },
-  { path: '/signout', name: 'Signout', component: 'Signout' },
-  { path: '/signin', name: 'Signin', component: 'Signin' },
-  { path: '*', name: 'NotFound', component: 'NotFound' }
+  { path: '/', name: 'Home', componentPath: 'Home' },
+  { path: '/resources/:id', name: 'Resource', componentPath: 'Resource' },
+  { path: '/tags/:tag', name: 'Tag', componentPath: 'Tag' },
+  { path: '/create', name: 'Create', componentPath: 'Create', meta: { requiresAuth: true } },
+  { path: '/admin', name: 'Admin', componentPath: 'Admin', meta: { requiresAuth: true } },
+  { path: '/signin', name: 'SignIn', componentPath: 'SignIn' },
+  { path: '/signout', name: 'SignOut', componentPath: 'SignOut' },
+  { path: '*', name: 'NotFound', componentPath: 'NotFound' }
 ]
 
 const routes = routerOptions.map(route => {
   return {
     ...route,
-    component: () => import(`@/views/${route.component}.vue`)
+    component: () => import(`@/views/${route.componentPath}/Index.vue`)
   }
 })
 

@@ -5,16 +5,16 @@
         <v-card-title primary-title>
           <v-flex xs12>
             <div>
-              <h2 class="headline">Publica un nuevo recurso</h2>
+              <h2 class="headline">{{ $t('createForm.postNew.title') }}</h2>
               <!-- Random text -->
-              <span class="grey--text">My super duper new resource</span>
+              <span class="grey--text">{{ $t("createForm.postNew.subTitle") }}</span>
             </div>
           </v-flex>
         </v-card-title>
         <v-card-text>
           <v-layout row wrap>
             <v-flex sm12>
-              <h4>Info</h4>
+              <h4>{{ $t("createForm.info") }}</h4>
             </v-flex>
             <!--Name-->
             <v-flex sm6 xs12>
@@ -77,7 +77,7 @@
             </v-flex>
 
             <v-flex xs12>
-              <h4>Media</h4>
+              <h4>{{ $t("createForm.media") }}</h4>
             </v-flex>
 
             <!-- InputFile -->
@@ -117,7 +117,7 @@
                 @click="validateForm('form')"
                 :disabled="isLoading"
                 :loading="isLoading"
-              >Submit</v-btn>
+              >{{ $t("createForm.submitBtn") }}</v-btn>
             </div>
           </v-layout>
         </v-card-text>
