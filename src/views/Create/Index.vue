@@ -5,9 +5,9 @@
         <v-card-title primary-title>
           <v-flex xs12>
             <div>
-              <h2 class="headline">{{ $t('createForm.PostNew.title') }}</h2>
+              <h2 class="headline">{{ $t('createForm.postNew.title') }}</h2>
               <!-- Random text -->
-              <span class="grey--text">{{ $t("createForm.PostNew.subTitle") }}</span>
+              <span class="grey--text">{{ $t("createForm.postNew.subTitle") }}</span>
             </div>
           </v-flex>
         </v-card-title>
