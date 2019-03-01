@@ -8,23 +8,25 @@ import i18n from './i18n'
 import firebase from 'firebase'
 import VueFire from 'vuefire'
 
+Vue.config.productionTip = false
 Vue.use(VueFire)
 
-Vue.config.productionTip = false
+new Vue({
+  router,
+  store,
+  render: h => h(App)
+}).$mount('#app')
 
-let app
-firebase.auth().onAuthStateChanged(user => {
-  console.log('[user]', user, app)
-  if (!app) {
-    app = new Vue({
-      router,
-      store,
-      i18n,
-      render: h => h(App),
-      created () {
-        store.dispatch('autoSignIn', user)
-      }
-    }).$mount('#app')
-  }
+const unsubscribe = firebase.auth().onAuthStateChanged(user => {
+  new Vue({
+    router,
+    store,
+    i18n,
+    render: h => h(App),
+    created () {
+      if (user) store.dispatch('autoSignIn', user)
+    }
+  }).$mount('#app')
   if (user) store.dispatch('getUserData', user)
+  unsubscribe()
 })
