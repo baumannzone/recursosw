@@ -2,6 +2,14 @@
   <v-container>
     <v-layout row wrap>
       <v-flex xs12>
+        <v-chip
+          label
+          small
+          v-for="(tag, idx) in tags"
+          :key="idx"
+          text-color
+          @click="goTo(tag)">{{ tag }}
+        </v-chip>
         <template v-for="resource in (shadowResources || resources)">
           <ResourceCard :data="resource" :key="resource.id"/>
         </template>
@@ -19,6 +27,7 @@
 import ResourceCard from './ResourceCard'
 import services from '@/services'
 import { mapGetters } from 'vuex'
+import tags from '@/utils/tags'
 
 const PAGE = 10
 export default {
@@ -27,6 +36,7 @@ export default {
     resources: [],
     shadowResources: null,
     tag: '',
+    tags: tags,
     limit: PAGE,
     page: 1,
     loadMore: true
@@ -50,6 +60,9 @@ export default {
             this.shadowResources = null
           })
       }
+    },
+    goTo (tag) {
+      this.$router.push({ name: 'Tag', params: { tag } })
     }
   },
   watch: {
@@ -84,6 +97,7 @@ export default {
     }
   },
   created () {
+    console.log(tags)
     this.tag = this.$route.params.tag
   }
 }
