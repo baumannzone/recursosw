@@ -11,11 +11,12 @@ import VueFire from 'vuefire'
 Vue.config.productionTip = false
 Vue.use(VueFire)
 
-new Vue({
-  router,
-  store,
-  render: h => h(App)
-}).$mount('#app')
+// new Vue({
+//   router,
+//   store,
+//   i18n,
+//   render: h => h(App)
+// }).$mount('#app')
 
 const unsubscribe = firebase.auth().onAuthStateChanged(user => {
   new Vue({

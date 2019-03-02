@@ -4,16 +4,16 @@ const resources = 'resources'
 
 export default {
   state: {
-    likes: {},
-    favs: {}
+    // likes: {},
+    // favs: {}
   },
   mutations: {
-    likes (state, payload) {
-      state.likes = payload
-    },
-    favs (state, payload) {
-      state.favs = payload
-    }
+    // likes (state, payload) {
+    //   state.likes = payload
+    // },
+    // favs (state, payload) {
+    //   state.favs = payload
+    // }
   },
   actions: {
     removeFav ({ commit, state }, id) {
@@ -22,11 +22,8 @@ export default {
     removeLike ({ commit, state }, id) {
       db.doc(`${resources}/${id}/likes/${state.user.uid}`).delete()
     },
-    // createResource ({ commit }, payload) {
-    //   return db.collection(resources).add(payload)
-    // },
-    createResource ({ commit }, { id, ...payload }) {
-      return db.collection('resources').doc(id).set(payload, { merge: true })
+    createResource ({ commit }, payload) {
+      return db.collection('resources').doc(payload.id).set(payload, { merge: true })
     },
     createDocRef () {
       return db.collection(resources).doc()
@@ -37,12 +34,6 @@ export default {
         .child('mainImg')
         .put(file)
     },
-    // uploadResourceImg ({ commit }, { id, img }) {
-    //   return storage
-    //     .ref(`${id}/`)
-    //     .child('mainImg')
-    //     .putString(img, 'data_url', { contentType: 'image/png' })
-    // },
     updateResourceImg ({ commit }, { id, img }) {
       return db.collection(resources).doc(id)
         .update({
@@ -64,7 +55,7 @@ export default {
     }
   },
   getters: {
-    likes: (state) => (state.likes),
-    favs: (state) => (state.favs)
+    // likes: (state) => (state.likes),
+    // favs: (state) => (state.favs)
   }
 }

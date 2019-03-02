@@ -41,7 +41,7 @@ export default {
             })
             commit('setLoading', false)
             commit('setError', null)
-            dispatch('getUserData', firebaseUser.user)
+            // dispatch('getUserData', firebaseUser.user)
             router.push({ name: 'Home' })
           } else {
             throw new Error('Error credentials')
