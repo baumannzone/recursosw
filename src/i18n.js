@@ -16,8 +16,9 @@ function loadLocaleMessages () {
   return messages
 }
 
+const currentLanguage = localStorage.getItem('currentLanguage') || (navigator.language ? navigator.language.split('-')[0] : 'en')
 export default new VueI18n({
-  locale: process.env.VUE_APP_I18N_LOCALE || 'en',
-  fallbackLocale: process.env.VUE_APP_I18N_FALLBACK_LOCALE || 'en',
+  locale: currentLanguage || process.env.VUE_APP_I18N_LOCALE || 'en',
+  fallbackLocale: process.env.VUE_APP_I18N_FALLBACK_LOCALE || currentLanguage || 'en',
   messages: loadLocaleMessages()
 })

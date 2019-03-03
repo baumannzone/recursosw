@@ -5,13 +5,19 @@ const services = {
    * Return resources
    * @returns {firebase.firestore.CollectionReference}
    */
-  getResources (limit, search) {
-    const ref = db.collection('resources').orderBy('createdAt', 'desc').limit(limit)
-    if (search) ref.where('name', search)
+  getResources (limit, tag) {
+    console.log('getResources', limit, tag)
+    const ref = db.collection('resources')
+      .orderBy('id', 'desc')
+      .limit(limit)
+    if (tag) return ref.where('tags', 'array-contains', tag)
     return ref
   },
   getResourcesByTag (limit, tag) {
-    return db.collection('resources').orderBy('createdAt', 'desc').limit(limit).where('tags', 'array-contains', tag)
+    return db.collection('resources')
+      .where('tags', 'array-contains', tag)
+      .orderBy('createdAt', 'desc')
+      .limit(limit)
   }
 }
 

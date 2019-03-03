@@ -10,7 +10,6 @@ const tags = [
   'Artificial Intelligence',
   'Education',
   'Open Source',
-  'Marketing',
   'Bots',
   'Photograpy',
   'Music'

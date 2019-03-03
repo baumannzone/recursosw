@@ -2,7 +2,16 @@
   <v-container>
     <v-layout row wrap>
       <v-flex xs12>
-        <template v-for="resource in resources">
+        <v-chip
+          label
+          small
+          v-for="(_tag, idx) in tags"
+          :key="idx"
+          text-color
+          :selected="_tag == tag"
+          @click="goTo(_tag)">{{ _tag }}
+        </v-chip>
+        <template v-for="resource in (shadowResources || resources)">
           <ResourceCard :data="resource" :key="resource.id"/>
         </template>
         <div class="text-xs-center" @click="more()" v-if="loadMore">
@@ -19,92 +28,78 @@
 import ResourceCard from './ResourceCard'
 import services from '@/services'
 import { mapGetters } from 'vuex'
+import tags from '@/utils/tags'
 
 const PAGE = 10
 export default {
   components: { ResourceCard },
   data: () => ({
-    resourceList: [],
-    ref: '',
+    resources: [],
+    shadowResources: null,
+    tag: '',
+    tags: tags,
     limit: PAGE,
+    page: 1,
     loadMore: true
   }),
   computed: {
-    ...mapGetters([ 'getUserData' ]),
-    resources () {
-      return this.resourceList
-    }
+    ...mapGetters([ 'getUserData', 'likes', 'favs' ])
   },
   methods: {
-    getResourcesByTag () {
-      const tag = this.$route.params.tag
-      this.ref = services.getResourcesByTag(this.limit, tag)
-      this.ref.onSnapshot((snapshot) => {
-        // console.log('>>', this.limit, snapshot.docs.length)
-        this.loadMore = this.limit === snapshot.docs.length
-        this.resourceList = snapshot.docs
-          .map(doc => {
-            // console.log('datos:', doc)
-            return {
-              id: doc.id,
-              ...doc.data(),
-              liked: !!this.getUserData && !!this.getUserData.likes[ doc.id ],
-              favourited: !!this.getUserData && !!this.getUserData.favs[ doc.id ]
-            }
-          })
-      }, (error) => {
-        console.warn('[getResourcesByTag]: ', error.toString())
-      })
-    },
-    getResources (limit) {
-      this.ref = services.getResources(limit || this.limit, this.search)
-      this.ref.onSnapshot((snapshot) => {
-        // console.log(this.limit, snapshot.docs.length)
-        this.loadMore = this.limit === snapshot.docs.length
-        this.resourceList = snapshot.docs
-          .map(doc => {
-            return {
-              id: doc.id,
-              ...doc.data(),
-              liked: !!this.getUserData && !!this.getUserData.likes[ doc.id ],
-              favourited: !!this.getUserData && !!this.getUserData.favs[ doc.id ]
-            }
-          })
-      }, (error) => {
-        console.warn('[getResources]: ', error.toString())
-      })
-    },
     more () {
       this.limit += PAGE
-      this.getResources(this.limit)
+      this.shadowResources = this.resources
+      if (this.$firestoreRefs && this.$firestoreRefs.resources) {
+        this.$unbind('resources')
+      }
+      if (this.$bind) {
+        this.$bind('resources', services.getResources(this.limit, this.tag))
+          .then(items => {
+            if (this.shadowResources.length === this.resources.length) {
+              this.loadMore = false
+            }
+            this.shadowResources = null
+          })
+      }
+    },
+    goTo (tag) {
+      this.$router.push({ name: 'Tag', params: { tag } })
     }
   },
   watch: {
     getUserData () {
-      // console.log('...watching...', this.getUserData)
-      this.resourceList = this.resourceList
-        .map(item => {
-          return {
-            ...item,
-            liked: !!this.getUserData && !!this.getUserData.likes[ item.id ],
-            favourited: !!this.getUserData && !!this.getUserData.favs[ item.id ]
-          }
-        })
+      const user = this.getUserData
+      if (user) {
+        this.resources.map(item => ({
+          ...item,
+          liked: this.likes[ item.id ],
+          favourited: this.favs[ item.id ]
+        }))
+      }
     },
-    '$route' (to, from) {
-      // react to route changes
-      // Se dispara al cambiar de 'Tag'
-      if (to.name === 'Tag' && to.params.tag !== from.params.tag) {
-        this.getResourcesByTag()
+    '$route' (to, from, other) {
+      if (to.name === 'Tag' && to.params.tag !== this.tag) {
+        this.tag = to.params.tag
+        this.shadowResources = this.resources
+        if (this.$firestoreRefs && this.$firestoreRefs.resources) {
+          this.$unbind('resources')
+        }
+        if (this.$bind) {
+          this.$bind('resources', services.getResources(this.limit, this.tag))
+            .then(items => { this.shadowResources = null })
+        }
       }
     }
   },
-  created () {
-    if (this.$route.name === 'Tag') {
-      this.getResourcesByTag()
-    } else {
-      this.getResources()
+  firestore () {
+    const tag = this.tag || this.$route.params.tag
+    return {
+      resources: services.getResources(this.limit, tag, this.startAt)
     }
+  },
+  created () {
+    console.log(tags)
+    this.tag = this.$route.params.tag
   }
 }
 </script>

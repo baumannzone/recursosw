@@ -50,6 +50,8 @@
 
 <script>
 // import { debounce } from './utils/debounce'
+import { mapGetters } from 'vuex'
+
 export default {
   name: 'App',
   data () {
@@ -62,14 +64,16 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['admin']),
     currentLang () {
       return this.$i18n.locale.toUpperCase()
     },
     menuItems () {
+      const from = this.$route.path.length > 2 ? `?from=${this.$route.path}` : ''
       return [
-        { displayName: this.$t('navMenu.admin'), icon: 'star', path: '/admin', requireAuth: true, requireAdmin: true },
+        { displayName: this.$t('navMenu.admin'), icon: 'settings', path: '/admin', requireAuth: true, requireAdmin: true },
         { displayName: this.$t('navMenu.create'), icon: 'add', path: '/create', requireAuth: true },
-        { displayName: this.$t('navMenu.signIn'), icon: 'contact_mail', path: '/signin', offAuthenticated: true },
+        { displayName: this.$t('navMenu.signIn'), icon: 'person', path: `/signin${from}`, notAuthenticated: true },
         { displayName: this.$t('navMenu.signOut'), icon: 'reply', path: '/signout', requireAuth: true }
       ]
     }
@@ -78,23 +82,19 @@ export default {
     goHome () {
       this.$router.push('/')
     },
-    // Make this more readable
-    // isLoggedIn
-    // isAdmin
-    // ...
     show (item) {
-      if (item.offAuthenticated) {
+      if (item.notAuthenticated) {
         return !this.$store.getters.isAuthenticated
+      } else if (item.requireAdmin) {
+        return this.admin
       } else if (item.requireAuth) {
-        if (item.requireAdmin) {
-          console.debug('Admin only!')
-        }
         return this.$store.getters.isAuthenticated
       }
       return true
     },
     selectLanguage (lang) {
       this.$i18n.locale = lang.title.toLowerCase()
+      localStorage.setItem('currentLanguage', this.$i18n.locale)
     }
   }
 }

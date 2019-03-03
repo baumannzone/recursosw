@@ -47,6 +47,9 @@ export default {
     },
     ghSignIn () {
       this.$store.dispatch('userSignInGithub')
+        .then(() => {
+          this.$router.push({ path: this.$route.query.from || '/' })
+        })
     }
   },
   computed: {
