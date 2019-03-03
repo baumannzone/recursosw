@@ -7,7 +7,7 @@ const routerOptions = [
   { path: '/resources/:id', name: 'Resource', componentPath: 'Resource' },
   { path: '/tags/:tag', name: 'Tag', componentPath: 'Tag' },
   { path: '/create', name: 'Create', componentPath: 'Create', meta: { requiresAuth: true } },
-  { path: '/admin', name: 'Admin', componentPath: 'Admin', meta: { requiresAuth: true } },
+  { path: '/admin', name: 'Admin', componentPath: 'Admin', meta: { requiresAuth: true, requiresAdmin: true } },
   { path: '/signin', name: 'SignIn', componentPath: 'SignIn' },
   { path: '/signout', name: 'SignOut', componentPath: 'SignOut' },
   { path: '*', name: 'NotFound', componentPath: 'NotFound' }
@@ -29,8 +29,14 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
+  const requiresAdmin = to.matched.some(record => record.meta.requiresAdmin)
   const isAuthenticated = store.getters.isAuthenticated
-  if (requiresAuth && !isAuthenticated) {
+  const admin = store.getters.admin
+
+  if (requiresAdmin && !admin) {
+    alert('Not authorized')
+    next({ name: 'Home' })
+  } else if (requiresAuth && !isAuthenticated) {
     console.log('U NEED LOGIN ☝️!', to)
     const query = to.path.length > 2 ? { from: to.path } : null
     next({ path: '/signin', query })
