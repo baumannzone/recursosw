@@ -31,8 +31,9 @@ router.beforeEach((to, from, next) => {
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
   const isAuthenticated = store.getters.isAuthenticated
   if (requiresAuth && !isAuthenticated) {
-    console.log('U NEED LOGIN ☝️!')
-    next('/signin')
+    console.log('U NEED LOGIN ☝️!', to)
+    const query = to.path.length > 2 ? { from: to.path } : null
+    next({ path: '/signin', query })
   } else {
     next()
   }

@@ -3,15 +3,11 @@ import { auth, ghProvider } from '@/config'
 
 export default {
   state: {
-    user: null,
-    userData: null
+    user: null
   },
   mutations: {
     setUser (state, payload) {
       state.user = payload
-    },
-    setUserData (state, payload) {
-      state.userData = payload
     }
   },
   actions: {
@@ -30,7 +26,7 @@ export default {
     },
     userSignInGithub ({ commit, dispatch }, payload) {
       commit('setLoading', true)
-      auth.signInWithPopup(ghProvider)
+      return auth.signInWithPopup(ghProvider)
         .then(firebaseUser => {
           if (firebaseUser.user) {
             commit('setUser', {
@@ -41,8 +37,7 @@ export default {
             })
             commit('setLoading', false)
             commit('setError', null)
-            // dispatch('getUserData', firebaseUser.user)
-            router.push({ name: 'Home' })
+            return { sucess: true }
           } else {
             throw new Error('Error credentials')
           }
@@ -59,13 +54,14 @@ export default {
           uid: payload.uid,
           email: payload.email
         })
+      } else {
+        commit('setUser', null)
       }
     },
     userSignOut ({ commit }) {
       console.log('[routerPush]')
       auth.signOut()
       commit('setUser', null)
-      commit('setUserData', null)
       router.push('/')
     }
   },

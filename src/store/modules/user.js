@@ -17,6 +17,7 @@ export default {
   getters: {
     getUserData: (state) => (state.user),
     likes: (state) => ((state.user || {}).likes || {}),
-    favs: (state) => ((state.user || {}).favs || {})
+    favs: (state) => ((state.user || {}).favs || {}),
+    admin: (state) => ((state.user || {}).roles || {}).admin
   }
 }

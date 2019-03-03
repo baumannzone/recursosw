@@ -1,6 +1,6 @@
 <template>
   <v-layout>
-    <v-flex xs12 sm10 offset-sm1 md8 offset-sm2 lg6 offset-lg3>
+    <v-flex xs12 sm10 offset-sm1 md8 offset-md2 lg6 offset-lg3>
       <v-card>
         <v-img
           v-if="resource.media"
