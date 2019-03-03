@@ -5,10 +5,11 @@
         <v-chip
           label
           small
-          v-for="(tag, idx) in tags"
+          v-for="(_tag, idx) in tags"
           :key="idx"
           text-color
-          @click="goTo(tag)">{{ tag }}
+          :selected="_tag == tag"
+          @click="goTo(_tag)">{{ _tag }}
         </v-chip>
         <template v-for="resource in (shadowResources || resources)">
           <ResourceCard :data="resource" :key="resource.id"/>
