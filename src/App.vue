@@ -94,6 +94,7 @@ export default {
     },
     selectLanguage (lang) {
       this.$i18n.locale = lang.title.toLowerCase()
+      localStorage.setItem('currentLanguage', this.$i18n.locale)
     }
   }
 }
