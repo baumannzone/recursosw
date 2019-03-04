@@ -1,5 +1,5 @@
 <template>
-  <span> R: {{ roles }} </span>
+  <span> R: {{ renderRoles }} </span>
 </template>
 
 <script>
@@ -15,7 +15,15 @@ export default {
   data: () => {
     return {}
   },
-  computed: {},
+  computed: {
+    renderRoles () {
+      return {
+        admin: this.roles.admin || false,
+        editor: this.roles.editor || false,
+        user: this.roles.user || false
+      }
+    }
+  },
   methods: {}
 }
 
