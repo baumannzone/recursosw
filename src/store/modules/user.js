@@ -15,7 +15,7 @@ export default {
       user.uid ? bindFirebaseRef('user', db.doc('users/' + user.uid)) : unbindFirebaseRef('user')
     }),
     users: firebaseAction(({ bindFirebaseRef }) => {
-      bindFirebaseRef('users')
+      bindFirebaseRef('users', db.collection('users'))
     }),
     updateUser ({ state }, { id, ...payload }) {
       state.users.doc(id).update(payload)
