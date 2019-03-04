@@ -1,5 +1,8 @@
 <template>
-  <span> R: {{ roles }} </span>
+  <div>
+    <span> R: {{ roles }} </span>
+    <button @click="updateRole()">UpdateRole</button>
+  </div>
 </template>
 
 <script>
@@ -16,7 +19,14 @@ export default {
     return {}
   },
   computed: {},
-  methods: {}
+  methods: {
+    updateRole () {
+      this.$store.displatch('updateUser', {
+        id: 'XoQ2sP8Q9FcRGkuQA6BWh1ewcGT2',
+        name: 'Robinator'
+      }).then(res => alert('OK'))
+    }
+  }
 }
 
 </script>
