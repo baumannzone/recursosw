@@ -1,5 +1,12 @@
 <template>
-  <span> R: {{ renderRoles }} </span>
+  <span>
+    <template>
+      <div>
+
+      </div>
+    </template>
+    R: {{ renderRoles }}
+  </span>
 </template>
 
 <script>
