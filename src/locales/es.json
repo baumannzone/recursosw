@@ -1,4 +1,8 @@
 {
+  "common": {
+    "users": "Usuarios",
+    "resources": "Recursos"
+  },
   "title": {
     "recurs": "Recurs",
     "OSW": "OSW"

@@ -1,10 +1,11 @@
 import { db } from '@/config'
 import { firebaseMutations, firebaseAction } from 'vuexfire'
-
+const usersRef = db.collection('users')
 export default {
   strict: true,
   state: {
-    user: null
+    user: null,
+    users: null
   },
   mutations: {
     ...firebaseMutations
@@ -12,7 +13,13 @@ export default {
   actions: {
     getUserData: firebaseAction(({ bindFirebaseRef, unbindFirebaseRef }, user) => {
       user.uid ? bindFirebaseRef('user', db.doc('users/' + user.uid)) : unbindFirebaseRef('user')
-    })
+    }),
+    users: firebaseAction(({ bindFirebaseRef }) => {
+      bindFirebaseRef('users', usersRef)
+    }),
+    updateUser ({ state }, { id, ...payload }) {
+      return usersRef.doc(id).set(payload, { merge: true })
+    }
   },
   getters: {
     getUserData: (state) => (state.user),
