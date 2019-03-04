@@ -3,7 +3,7 @@
       <v-layout row wrap>
         <v-flex xs12>
           <v-tabs v-model="active" color="grey lighten-5">
-            <v-tab v-for="(comp, idx) in components" :key="idx" ripple> {{ comp.name }} </v-tab>
+            <v-tab v-for="(comp, idx) in components" :key="idx" ripple> {{ comp.displayName }} </v-tab>
             <v-tab-item v-for="(comp, idx) in components" :key="idx">
               <v-card flat>
                 <v-card-text>
@@ -19,27 +19,29 @@
 
 <script>
 
-import TabUsers from './AdminUsers.vue'
-import TabResources from './AdminResources.vue'
+import TabUsers from './Users/Index.vue'
+import TabResources from './Resources/Index.vue'
 
 export default {
-  name: 'Admin',
+  name: 'AdminPage',
   components: {
     TabUsers,
     TabResources
   },
   data: () => {
     return {
-      active: 0,
-      components: [
-        { name: 'Users', src: TabUsers },
-        { name: 'Resources', src: TabResources }
-      ]
+      active: 0
     }
   },
   computed: {
     currentTabComponent () {
       return this.components[this.active].src
+    },
+    components () {
+      return [
+        { displayName: this.$t('common.users'), name: 'Users', src: TabUsers },
+        { displayName: this.$t('common.resources'), name: 'Resources', src: TabResources }
+      ]
     }
   }
 }
