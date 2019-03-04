@@ -1,6 +1,6 @@
 import { db } from '@/config'
 import { firebaseMutations, firebaseAction } from 'vuexfire'
-
+const usersRef = db.collection('users')
 export default {
   strict: true,
   state: {
@@ -15,10 +15,10 @@ export default {
       user.uid ? bindFirebaseRef('user', db.doc('users/' + user.uid)) : unbindFirebaseRef('user')
     }),
     users: firebaseAction(({ bindFirebaseRef }) => {
-      bindFirebaseRef('users', db.collection('users'))
+      bindFirebaseRef('users', usersRef)
     }),
     updateUser ({ state }, { id, ...payload }) {
-      state.users.doc(id).update(payload)
+      return usersRef.doc(id).set(payload, { merge: true })
     }
   },
   getters: {
