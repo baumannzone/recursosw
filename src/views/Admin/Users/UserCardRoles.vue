@@ -1,6 +1,6 @@
 <template>
   <div>
-    <span> R: {{ roles }} </span>
+    <span> R: {{ renderRoles }} </span>
     <button @click="updateRole()">UpdateRole</button>
   </div>
 </template>
@@ -18,7 +18,15 @@ export default {
   data: () => {
     return {}
   },
-  computed: {},
+  computed: {
+    renderRoles () {
+      return {
+        admin: this.roles.admin || false,
+        editor: this.roles.editor || false,
+        user: this.roles.user || false
+      }
+    }
+  },
   methods: {
     updateRole () {
       this.$store.displatch('updateUser', {
