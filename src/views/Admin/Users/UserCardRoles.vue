@@ -29,9 +29,11 @@ export default {
   },
   methods: {
     updateRole () {
-      this.$store.displatch('updateUser', {
+      this.$store.dispatch('updateUser', {
         id: 'XoQ2sP8Q9FcRGkuQA6BWh1ewcGT2',
-        name: 'Robinator'
+        roles: {
+          user: false
+        }
       }).then(res => alert('OK'))
     }
   }
