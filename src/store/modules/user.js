@@ -18,7 +18,7 @@ export default {
       bindFirebaseRef('users', usersRef)
     }),
     updateUser ({ state }, { id, ...payload }) {
-      usersRef.doc(id).update(payload)
+      usersRef.doc(id).set(payload, { merge: true })
     }
   },
   getters: {
