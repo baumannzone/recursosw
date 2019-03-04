@@ -4,7 +4,8 @@ import { firebaseMutations, firebaseAction } from 'vuexfire'
 export default {
   strict: true,
   state: {
-    user: null
+    user: null,
+    users: null
   },
   mutations: {
     ...firebaseMutations
@@ -12,7 +13,13 @@ export default {
   actions: {
     getUserData: firebaseAction(({ bindFirebaseRef, unbindFirebaseRef }, user) => {
       user.uid ? bindFirebaseRef('user', db.doc('users/' + user.uid)) : unbindFirebaseRef('user')
-    })
+    }),
+    users: firebaseAction(({ bindFirebaseRef }) => {
+      bindFirebaseRef('users')
+    }),
+    updateUser ({ state }, { id, ...payload }) {
+      state.users.doc(id).update(payload)
+    }
   },
   getters: {
     getUserData: (state) => (state.user),
