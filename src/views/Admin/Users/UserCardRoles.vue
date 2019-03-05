@@ -1,7 +1,7 @@
 <template>
   <div class="d-flex">
     <template v-for="(rol, key) in renderRoles">
-      <v-switch v-model="roles[key]" persistent-hint :hint="key" :key="key"></v-switch>
+      <v-switch v-model="roles[key]" persistent-hint :hint="key" :key="key" @change="updateRole(key)"></v-switch>
     </template>
   </div>
   <!-- <v-btn color="primary" @click="updateRole()">UpdateRole</v-btn> -->
@@ -30,14 +30,17 @@ export default {
     }
   },
   methods: {
-    updateRole () {
-      this.$store.dispatch('updateUser', {
-        id: 'XoQ2sP8Q9FcRGkuQA6BWh1ewcGT2',
-        roles: {
-          user: true
-        }
-      })
-        .then(res => alert('OK'))
+    updateRole (key) {
+      const data = {}
+      data[key] = this.roles[key]
+      this.$emit('changeRole', data)
+      // this.$store.dispatch('updateUser', {
+      //   id: 'XoQ2sP8Q9FcRGkuQA6BWh1ewcGT2',
+      //   roles: {
+      //     user: true
+      //   }
+      // })
+      //   .then(res => alert('OK'))
     }
   }
 }

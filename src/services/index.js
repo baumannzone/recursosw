@@ -18,6 +18,16 @@ const services = {
       .where('tags', 'array-contains', tag)
       .orderBy('createdAt', 'desc')
       .limit(limit)
+  },
+  /**
+   * Update one role at time `admin`, `user` or `editor`
+   * @param {String} id
+   * @param {Object} data
+   */
+  updateUserRole ({ id, ...data }) {
+    console.log(data)
+    return db.collection('users').doc(id)
+      .set(data, { merge: true })
   }
 }
 
