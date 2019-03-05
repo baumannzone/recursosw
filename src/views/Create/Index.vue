@@ -127,6 +127,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import rules from '@/utils/rules'
 import tagList from '@/utils/tags'
 
@@ -151,6 +152,11 @@ export default {
       rules,
       tagList
     }
+  },
+  computed: {
+    ...mapGetters({
+      userData: 'getUserData'
+    })
   },
   methods: {
     changeFile (ev) {
@@ -197,6 +203,7 @@ export default {
           id: docRef.id,
           ...this.form,
           createdAt: new Date(),
+          author: this.userData.id,
           media: {
             mainImg: ''
           },
