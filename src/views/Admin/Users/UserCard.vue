@@ -11,7 +11,7 @@
         <div>{{ user.email }}</div>
       </div>
       <div class="bottom">
-        <user-roles :roles="user.roles" />
+        <user-roles :roles="user.roles" @changeRole="changeRole"/>
       </div>
     </div>
   </v-card>
@@ -19,6 +19,7 @@
 
 <script>
 import { db } from '@/config'
+import s from '@/services'
 import UserRoles from './UserCardRoles.vue'
 
 export default {
@@ -35,7 +36,22 @@ export default {
   data: () => {
     return {}
   },
-  methods: {},
+  methods: {
+    changeRole (val) {
+      const obj = { roles: val }
+      s.updateUserRole({ id: this.user.id, ...obj })
+        .then(() => {
+          console.debug('Role Updated ;)')
+        })
+        .catch((err) => {
+          console.debug('Error [updateUserRole]')
+          console.error(err.toString())
+        })
+      // This 💩 isn't working
+      // this.$store.dispatch('updateUser', { id: this.user.id, val })
+      //   .then(res => alert('OK'))
+    }
+  },
   firestore: () => ({ users: db.collection('users') })
 }
 
