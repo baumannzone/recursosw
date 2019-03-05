@@ -4,7 +4,6 @@
       <v-switch v-model="roles[key]" persistent-hint :hint="key" :key="key" @change="updateRole(key)"></v-switch>
     </template>
   </div>
-  <!-- <v-btn color="primary" @click="updateRole()">UpdateRole</v-btn> -->
 </template>
 
 <script>
