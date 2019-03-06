@@ -145,4 +145,5 @@ exports.unindexResource = functions.firestore
 export const onSignUpFunc = functions.auth.user().onCreate(onSignUp);
 
 // New resource created
-export const onResourceCreateFunc = functions.database.ref('/resources').onCreate(onResourceCreated);
+export const onResourceCreateFunc = functions.firestore.document('/resources')
+  .onCreate(onResourceCreated);
