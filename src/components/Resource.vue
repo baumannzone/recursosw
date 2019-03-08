@@ -2,15 +2,19 @@
   <v-layout>
     <v-flex xs12 sm10 offset-sm1 md8 offset-md2 lg6 offset-lg3>
       <v-card>
-        <v-img
-          v-if="resource.media"
-          :src="resource.media.mainImg" aspect-ratio="2.75"
-        ></v-img>
+        <a :href="resource.link">
+          <v-img
+            v-if="resource.media"
+            :src="resource.media.mainImg" aspect-ratio="2.75"
+          ></v-img>
+        </a>
 
         <v-card-title primary-title>
           <div>
             <h3 class="headline mb-0">{{ resource.name }}</h3>
-            <div>{{ resource.fullDesc || resource.shortDesc }}</div>
+            <p v-if="resource.shortDesc">{{ resource.shortDesc }}</p>
+            <p v-if="resource.fullDesc"> {{ resource.fullDesc }} </p>
+            <a :href="resource.link">{{ $t("common.website") }}</a>
           </div>
         </v-card-title>
 

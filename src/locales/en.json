@@ -1,7 +1,8 @@
 {
   "common": {
     "users": "Users",
-    "resources": "Resources"
+    "resources": "Resources",
+    "website": "Website"
   },
   "title": {
     "recurs": "Recurs",
