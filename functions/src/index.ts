@@ -5,6 +5,7 @@ import { join, dirname } from 'path'
 import * as sharp from 'sharp'
 import * as fs from 'fs-extra'
 import onSignUp from './onSignUp'
+import onResourceCreated from './onResourceCreated'
 import * as algoliasearch from 'algoliasearch'
 const env = functions.config()
 const client = algoliasearch(env.algolia.appid, env.algolia.apikey)
@@ -142,3 +143,7 @@ exports.unindexResource = functions.firestore
 
 // When some user is logged in the app
 export const onSignUpFunc = functions.auth.user().onCreate(onSignUp);
+
+// New resource created
+export const onResourceCreateFunc = functions.firestore.document('/resources')
+  .onCreate(onResourceCreated);
