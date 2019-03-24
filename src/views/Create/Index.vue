@@ -155,7 +155,9 @@ export default {
   },
   computed: {
     ...mapGetters({
-      userData: 'getUserData'
+      userData: 'getUserData',
+      admin: 'admin',
+      editor: 'editor'
     })
   },
   methods: {
@@ -210,7 +212,7 @@ export default {
           },
           favsCount: 0,
           likesCount: 0,
-          status: this.userData.roles.admin ? 'appoved' : 'pending'
+          status: (this.admin || this.editor) ? 'appoved' : 'pending'
         }
         const imgData = {
           id: docRef.id,

@@ -25,6 +25,7 @@ export default {
     getUserData: (state) => (state.user),
     likes: (state) => ((state.user || {}).likes || {}),
     favs: (state) => ((state.user || {}).favs || {}),
-    admin: (state) => ((state.user || {}).roles || {}).admin
+    admin: (state) => ((state.user || {}).roles || {}).admin,
+    editor: (state) => ((state.user || {}).roles || {}).editor
   }
 }
