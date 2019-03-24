@@ -28,6 +28,9 @@ export default {
     createDocRef () {
       return db.collection(resources).doc()
     },
+    updateResource ({ commit }, { id, payload }) {
+      return db.collection(resources).doc(id).update(payload)
+    },
     uploadResourceImg ({ commit }, { id, file }) {
       return storage
         .ref(`${resources}/${id}/`)

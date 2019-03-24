@@ -14,7 +14,7 @@
     </v-navigation-drawer>
     <v-toolbar app temporary fixed class="elevation-0">
       <v-toolbar-side-icon @click.stop="drawer = !drawer" class="hidden-md-and-up"/>
-      <v-toolbar-title class="headline text-uppercase cursor" @click="goHome">
+       <v-toolbar-title class="headline text-uppercase cursor" @click="goHome">
         <!-- i18n Working -->
         <span>{{ $t('title.recurs') }}<span class="font-weight-light">{{ $t('title.OSW') }}</span></span>
       </v-toolbar-title>

@@ -98,7 +98,7 @@
                 type="file"
                 ref="inputFile"
                 class="input-file"
-                @input="changeFile"
+                @change="changeFile($event)"
                 accept="image/*"
               >
             </v-flex>
@@ -136,11 +136,11 @@ export default {
     return {
       isLoading: false,
       form: {
-        name: '',
-        shortDesc: '',
-        fullDesc: '',
-        link: '',
-        tags: null
+        name: `Test ${Date.now()}`,
+        shortDesc: 'blablabla',
+        fullDesc: 'sdfkjnsdjkf',
+        link: 'testing.com',
+        tags: ['Bots']
       },
       valid: true,
       mainImg: {
@@ -160,6 +160,7 @@ export default {
   },
   methods: {
     changeFile (ev) {
+      console.log('ev.target.files.length:', ev.target.files.length)
       if (ev.target.files.length > 0) {
         const file = ev.target.files[0]
         this.form.imgName = file.name
@@ -208,7 +209,8 @@ export default {
             mainImg: ''
           },
           favsCount: 0,
-          likesCount: 0
+          likesCount: 0,
+          status: this.userData.roles.admin ? 'appoved' : 'pending'
         }
         const imgData = {
           id: docRef.id,
@@ -230,7 +232,7 @@ export default {
         // *****************************************************
         this.isLoading = false
       } catch (err) {
-        console.log('Error [Submit Form]:')
+        console.log('Error [Submit Form]:', err)
         console.log(JSON.stringify(err))
         this.isLoading = false
       }

@@ -6,6 +6,13 @@
           <span v-for="(resource, i) in (shadowResources || resources)" :key="i">
             <v-card class="admin">
               <div class="resource pa-2 mb-2">{{ resource.name }}</div>
+              <v-select
+                v-model="resource.status"
+                :items="status"
+                :menu-props="{ maxHeight: '400' }"
+                label="Status"
+                @input="updateStatus(resource)"
+              ></v-select>
             </v-card>
           </span>
         </v-flex>
@@ -21,11 +28,19 @@ export default {
   data: () => {
     return {
       resources: [],
+      status: ['approved', 'rejected', 'pending'],
       shadowResources: null,
       isLoading: false
     }
   },
-  methods: {},
+  methods: {
+    updateStatus (resource) {
+      return this.$store.dispatch('updateResource', {
+        id: resource.id,
+        payload: { status: resource.status }
+      })
+    }
+  },
   firestore: () => ({ resources: db.collection('resources') })
 }
 

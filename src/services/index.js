@@ -8,6 +8,7 @@ const services = {
   getResources (limit, tag) {
     console.log('getResources', limit, tag)
     const ref = db.collection('resources')
+      .where('status', '==', 'approved')
       .orderBy('id', 'desc')
       .limit(limit)
     if (tag) return ref.where('tags', 'array-contains', tag)

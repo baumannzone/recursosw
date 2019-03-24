@@ -7,7 +7,7 @@ import resource from './modules/resource'
 
 Vue.use(Vuex)
 
-export default new Vuex.Store({
+const store = new Vuex.Store({
   modules: {
     auth,
     user,
@@ -32,3 +32,5 @@ export default new Vuex.Store({
 
   }
 })
+
+export default store

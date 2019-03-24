@@ -26,6 +26,8 @@
     "vuexfire": "^3.0.0-alpha.14"
   },
   "devDependencies": {
+    "firebase-admin": "^7.1.1",
+    "elasticsearch": "^15.4.1",
     "@cypress/webpack-preprocessor": "^3.0.0",
     "@kazupon/vue-i18n-loader": "^0.3.0",
     "@vue/cli-plugin-babel": "^3.0.5",
